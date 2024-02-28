@@ -1,7 +1,27 @@
 <div class="login">
-  <div class="container">
-    <form [formGroup]="form">
+  <div class="card">
+    <div class="container">
+      <form class="form" [formGroup]="login">
+        <h2 class="title">Iniciar Sesión</h2>
+        <div class="sub-title">usar dirección de correo electrónico</div>
+        <div class="group">
+          <input class="control" formControlName="username" placeholder="Correo electrónico">
+        </div>
+        <div class="group">
+          <input class="control" formControlName="password" type="password" placeholder="Contraseña">
+        </div>
+        <div class="forgot">
+          <a>¿Olvidaste tu contraseña?</a>
+        </div>
+        <div class="submit">
+          <button type="submit" class="button large primary">Ingresar</button>
+        </div>
+      </form>
+    </div>
 
-    </form>
+    <div class="switch">
+
+    </div>
+
   </div>
 </div>

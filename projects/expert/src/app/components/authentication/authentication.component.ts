@@ -15,10 +15,10 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 } )
 export class AuthenticationComponent {
 
-  public form: FormGroup;
+  public login: FormGroup;
 
   constructor( private builder: FormBuilder ) {
-    this.form = this.builder.group( {
+    this.login = this.builder.group( {
       username: [ { value: '', disabled: false }, [ Validators.required ] ],
       password: [ { value: '', disabled: false }, [ Validators.required ] ]
     } )

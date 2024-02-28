@@ -1,52 +1,33 @@
-@import "./../../../theme/colors";
-@import "./../../../theme/times";
+@import "../../../theme/variables";
 
 .login {
-  position: relative;
-  width: 1000px;
-  min-width: 1000px;
-  min-height: 600px;
-  height: 600px;
-  padding: 25px;
-  background-color: $neumorphism-a;
-  box-shadow: 10px 10px 10px $neumorphism-b, -10px -10px 10px $light;
-  border-radius: 12px;
-  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  @media(max-width: 1200px) {
-    transform: scale(.7);
-  }
-  @media(max-width: 1000px) {
-    transform: scale(.6);
-  }
-  @media(max-width: 800px) {
-    transform: scale(.5);
-  }
-  @media(max-width: 600px) {
-    transform: scale(.4);
-  }
-
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-
-    top: 0;
-    width: 600px;
-    height: 100%;
+  .card {
+    position: relative;
+    background-color: $card-color;
+    width: 1000px;
+    height: 600px;
+    border-radius: 10px;
     padding: 25px;
+    box-shadow: 10px 10px 10px rgba(black, .2), -10px -10px 10px rgba($dark-light-color, .2);
+    overflow: hidden;
 
-    background-color: $neumorphism-b;
-    transition: $long-transition;
-
-    form {
+    .container {
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
-      width: 100%;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      width: 600px;
       height: 100%;
+      padding: 25px;
+      transition: all $transition;
     }
   }
 }

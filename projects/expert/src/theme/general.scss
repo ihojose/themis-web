@@ -1,20 +1,15 @@
-@import "colors";
+@import "variables";
 
 *, *::after, *::before {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  user-select: none;
 }
 
 body {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-family: 'Montserrat', sans-serif;
-  font-size: 12px;
-  background-color: $neumorphism-a;
-  color: $gray;
+  font-size: 14px;
+  background-color: $background-color;
+  color: $primary-text-color;
 }
+
