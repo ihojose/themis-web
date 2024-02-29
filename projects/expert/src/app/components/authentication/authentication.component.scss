@@ -8,6 +8,8 @@
   justify-content: center;
 
   .card {
+    display: flex;
+    flex-direction: row;
     position: relative;
     background-color: $card-color;
     width: 1000px;
@@ -22,12 +24,46 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: absolute;
       top: 0;
       width: 600px;
       height: 100%;
       padding: 25px;
       transition: all $transition;
+    }
+  }
+
+  .switch {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 400px;
+
+    .switch-container {
+      text-align: center;
+
+      .title {
+        margin-bottom: 2rem;
+      }
+
+      .description {
+        color: rgba($primary-text-color, .6);
+        padding: 0 2rem;
+      }
+
+      .reg {
+        margin-top: 3rem;
+      }
+    }
+
+    .s-circle {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background-color: $dark-light-color;
+      box-shadow: inset 8px 8px 12px $background-color, inset -8px -8px 12px $dark-light-color;
+      bottom: -60%;
     }
   }
 }

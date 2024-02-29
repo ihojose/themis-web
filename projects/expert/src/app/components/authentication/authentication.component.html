@@ -1,7 +1,7 @@
 <div class="login">
   <div class="card">
     <div class="container">
-      <form class="form" [formGroup]="login">
+      <form class="form" [formGroup]="login" (submit)="auth()">
         <h2 class="title">Iniciar Sesión</h2>
         <div class="sub-title">usar dirección de correo electrónico</div>
         <div class="group">
@@ -20,7 +20,14 @@
     </div>
 
     <div class="switch">
-
+      <div class="s-circle"></div>
+      <div class="switch-container">
+        <h2 class="title">Hola compañero!</h2>
+        <p class="description">¿Aún no tienes cuenta?. Tranquilo, puedes registrar una nueva cuenta.</p>
+        <div class="reg">
+          <button class="button">Crear cuenta</button>
+        </div>
+      </div>
     </div>
 
   </div>
