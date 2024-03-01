@@ -14,7 +14,13 @@
           <a>¿Olvidaste tu contraseña?</a>
         </div>
         <div class="submit">
-          <button type="submit" class="button large primary">Ingresar</button>
+          <button type="submit" class="button large primary" [disabled]="loading">
+            @if (loading) {
+              <fa-icon class="icon" [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+            } @else {
+              Ingresar
+            }
+          </button>
         </div>
       </form>
     </div>

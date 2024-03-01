@@ -15,7 +15,6 @@
     width: 1000px;
     height: 600px;
     border-radius: 10px;
-    padding: 25px;
     box-shadow: 10px 10px 10px rgba(black, .2), -10px -10px 10px rgba($dark-light-color, .2);
     overflow: hidden;
 
@@ -33,6 +32,7 @@
   }
 
   .switch {
+    background-color: rgba($background-color, .3);
     display: flex;
     justify-content: center;
     align-items: center;
