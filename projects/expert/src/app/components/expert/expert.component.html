@@ -1,1 +1,26 @@
-<p>expert works!</p>
+<!-- header control -->
+<header id="header">
+  <div class="left">
+    <!-- -->
+  </div>
+  <div class="center">
+    <!-- -->
+  </div>
+  <div class="right">
+    <div class="controls">
+
+      <div class="user">
+        <div class="cover">
+          <fa-icon [icon]="['fas', 'user']"></fa-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- end header control -->
+
+<router-outlet/>
+
+<footer>
+  <div class="credits">{{ currentYear }} - Themis by Jose Buelvas & Alessandro Nuñez</div>
+</footer>

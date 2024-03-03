@@ -1,0 +1,14 @@
+@import "variables";
+
+footer {
+  background-color: rgba($card-color, .8);
+  box-shadow: 0 -5px 8px rgba(black, .1);
+  color: rgba($primary-text-color, .5);
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,46 @@
+@import "variables";
+
+header#header {
+  background-color: rgba($card-color, .8);
+  width: 100vw;
+  height: 70px;
+  box-shadow: 0 5px 8px rgba(black, .1);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  > .right,
+  > .left {
+    position: relative;
+    grid: {
+      row: {
+        start: 1;
+        end: 3;
+      };
+    };
+  }
+
+  > .center {
+    position: relative;
+    grid: {
+      row: {
+        start: 1;
+        end: 3;
+      };
+      column: {
+        start: 2;
+        end: 4;
+      };
+    };
+  }
+
+  > .right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+
+    > .controls {
+      padding-right: 1rem;
+    }
+  }
+}

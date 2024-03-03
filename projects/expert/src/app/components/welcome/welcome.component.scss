@@ -1,0 +1,71 @@
+@import "./../../../theme/variables";
+
+.welcome-content {
+  margin: 0 auto;
+  width: 800px;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 50px;
+
+    .icon {
+      background-color: $primary-color;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+
+    .description {
+      margin-top: .5rem;
+      color: rgba($primary-text-color, .6);
+      font-size: 14px;
+    }
+  }
+
+  h2 {
+    &.title {
+      font-size: 40px;
+    }
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 50px;
+    text-align: center;
+
+    > div {
+      padding: .5rem;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background-color: rgba($dark-light-color, .6);
+      color: rgba($primary-text-color, .6);
+      font-size: 15px;
+      height: 90px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: .5rem;
+    }
+  }
+
+  .start-talking {
+    text-align: center;
+    margin-top: 60px;
+  }
+}

@@ -1,0 +1,37 @@
+<div class="welcome-content animate__animated animate__fadeIn">
+  <div class="header">
+    <div class="icon">
+      <div class="icon-frame">
+        <fa-icon [icon]="['fas', 'scale-balanced']"></fa-icon>
+      </div>
+    </div>
+    <h2 class="title">Bienvenido a Themis</h2>
+    <div class="description">El experto en ayudarte a dar una sentencia justa.</div>
+  </div>
+  <div class="container">
+    <div>
+      <h3>¿Qué puedes hacer?</h3>
+      <div class="card">
+        Puedes determinar las posibles sentencias que debería tener una persona por haber violado una ley.
+      </div>
+    </div>
+    <div>
+      <h3>Metodología</h3>
+      <div class="card">
+        Responderás una serie de preguntas cerradas que nos ayudará a tomar la decisión.
+      </div>
+    </div>
+    <div>
+      <h3>Sentencia</h3>
+      <div class="card">
+        El resultado de la sentencia se tomará de una serie de agravantes y variables según el camino del árbol de decisión.
+      </div>
+    </div>
+  </div>
+  <div class="start-talking">
+    <button class="button primary" (click)="start()">
+      <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
+      Iniciar consulta legal
+    </button>
+  </div>
+</div>
