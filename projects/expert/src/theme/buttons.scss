@@ -46,4 +46,34 @@
       background-color: rgba($secondary-color-light, .3);
     }
   }
+
+  &.secondary {
+    background-color: $secondary-color;
+
+    &:hover {
+      background-color: rgba($secondary-color, .8);
+    }
+
+    &:disabled {
+      background-color: rgba($secondary-color, .3);
+    }
+  }
+}
+
+.c-button-icon {
+  background-color: $dark-light-color-2;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba($secondary-text-color, .6);
+  cursor: pointer;
+
+  &:hover {
+    background-color: $light-color-2;
+    color: $secondary-color;
+  }
 }

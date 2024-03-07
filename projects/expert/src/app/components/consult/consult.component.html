@@ -1,3 +1,112 @@
 <div class="the-consult">
 
+  <!-- sidebar -->
+  <div class="sidebar animate__animated animate__fadeInLeft">
+    <div class="title">
+      <div class="desc">
+        <h2>Archivo de consultas</h2>
+        <span>{{ totalSessions | i18nPlural: pluralSessions }}</span>
+      </div>
+      <div class="add-content">
+        <button class="c-button-icon">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- session list -->
+    <div id="sessions" class="sessions">
+      <ul>
+        <li class="active">
+          <div class="icon-cont">
+            <div class="icon-i">
+              <fa-icon [icon]="['fas', 'diagram-predecessor']"></fa-icon>
+            </div>
+          </div>
+          <div class="text">
+            Elemento del menú
+          </div>
+          <div class="delete-cont">
+            <div class="icon-i">
+              <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="icon-cont">
+            <div class="icon-i">
+              <fa-icon [icon]="['fas', 'diagram-predecessor']"></fa-icon>
+            </div>
+          </div>
+          <div class="text">
+            Elemento del menú
+          </div>
+          <div class="delete-cont">
+            <div class="icon-i">
+              <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- end session list -->
+
+  </div>
+  <!-- end sidebar -->
+
+  <!-- chat expert -->
+  <div class="chat animate__animated animate__fadeIn">
+
+    <div class="chat-timeline">
+
+      <!-- chat item -->
+      <div class="item">
+        <div class="item-header">
+          Hi
+        </div>
+        <div class="item-content">
+          Description
+
+          <div class="options">
+
+            <button class="option active">
+              Sí
+            </button>
+            <button class="option active" disabled>
+              Sí
+            </button>
+            <button class="option">
+              No
+            </button>
+            <button class="option" disabled>
+              No
+            </button>
+
+          </div>
+        </div>
+      </div>
+      <!-- end chat item -->
+
+    </div>
+
+  </div>
+  <!-- end expert -->
+
+  <div class="history animate__animated animate__fadeInRight">
+    <div class="title">
+      <h3>Historial</h3>
+    </div>
+    <div class="history-items">
+      <ul>
+        <li>
+          <div class="time-icon">
+            <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+          </div>
+          <div class="item">
+            10/10/2022 14:35 - Sí
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

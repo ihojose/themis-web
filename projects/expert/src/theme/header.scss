@@ -1,12 +1,16 @@
 @import "variables";
 
 header#header {
-  background-color: rgba($card-color, .8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba($dark-light-color, .8);
   width: 100vw;
-  height: 70px;
+  height: $navbar-height;
   box-shadow: 0 5px 8px rgba(black, .1);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  z-index: 9999;
 
   > .right,
   > .left {

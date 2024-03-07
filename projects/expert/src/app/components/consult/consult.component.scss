@@ -1,0 +1,216 @@
+@import "./../../../theme/variables";
+
+.the-consult {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  height: calc(100vh - $navbar-height);
+
+  // sidebar -----------------------------------------------------------------------------------------------------------
+  > .sidebar {
+    position: relative;
+    background-color: rgba($card-color, .8);
+    grid: {
+      column: {
+        start: 1;
+        end: 2;
+      };
+    };
+
+    .title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 1.5rem;
+
+      h2 {
+        margin-bottom: .6rem;
+        color: white;
+        font-size: 20px;
+      }
+
+      .desc {
+        flex-grow: 1;
+
+        span {
+          color: rgba($secondary-text-color, 1);
+        }
+      }
+
+      .add-content {
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+      }
+    }
+
+    // navigation ====>
+    .sessions {
+      ul {
+        list-style-type: none;
+
+        li {
+          padding: .5rem;
+          margin-left: 1rem;
+          margin-bottom: .4rem;
+          cursor: pointer;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          transition: all 300ms;
+          border-radius: 25px 0 0 25px;
+
+          .icon-i {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: rgba($background-color, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: rgba($light-color-2, .7);
+          }
+
+          .text {
+            padding-left: .5rem;
+            flex-grow: 1;
+          }
+
+          .delete-cont {
+            .icon-i {
+              display: none;
+              background-color: rgba($danger-color, .3);
+
+              &:hover {
+                background-color: rgba($light-color-2, .9);
+                color: $danger-color;
+              }
+            }
+          }
+
+          &:hover {
+            background-color: rgba($dark-light-color-2, .7);
+
+            .delete-cont {
+              .icon-i {
+                display: flex;
+              }
+            }
+          }
+
+          &.active {
+            background-color: $background-color;
+
+            .icon-i {
+              background-color: rgba($card-color, 1);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // chat content =====>
+  > .chat {
+    position: relative;
+    grid: {
+      column: {
+        start: 2;
+        end: 5;
+      };
+    };
+
+    .chat-timeline {
+      width: 750px;
+      margin: 1rem auto;
+      overflow-y: auto;
+
+      // item
+      .item {
+        overflow: hidden;
+        border-radius: 10px;
+
+        > .item-header {
+          background-color: $dark-light-color-2;
+          padding: 1.3rem;
+        }
+
+        > .item-content {
+          background-color: $card-color;
+          padding: 1.3rem;
+
+          .options {
+            margin-top: 1.5rem;
+
+            > .option {
+              background-color: transparent;
+              border: 2px solid $primary-color;
+              color: $primary-color;
+              cursor: pointer;
+              margin-right: .8rem;
+              padding: .4rem .8rem;
+              border-radius: 8px;
+              transition: all 300ms;
+              font-weight: 600;
+              font-size: 14px;
+
+              &.active,
+              &:hover {
+                background-color: $primary-color;
+                color: $card-color;
+              }
+
+              &.active {
+                &:disabled {
+                  background-color: $primary-color;
+                  color: $card-color;
+                }
+              }
+
+              &:disabled {
+                cursor: not-allowed;
+                background-color: transparent;
+                border: 2px solid rgba($primary-color, .6);
+                color: rgba($primary-color, .6);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // history list =====>
+  > .history {
+    padding: 1rem;
+
+    .title {
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style-type: none;
+
+      > li {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        cursor: pointer;
+        margin-bottom: .3rem;
+        color: rgba($secondary-text-color, .9);
+        border-right: 3px solid transparent;
+        transition: all 200ms;
+
+        &:hover {
+          border-color: $secondary-text-color;
+        }
+
+        > .item {
+          padding-left: .5rem;
+        }
+      }
+    }
+  }
+}

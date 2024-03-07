@@ -19,8 +19,6 @@ import moment from "moment";
 } )
 export class ExpertComponent implements OnInit {
 
-  public currentYear: number = moment().year();
-
   constructor( private storage: LocalStorageService, private router: Router, private icons: FaIconLibrary ) {
     this.icons.addIconPacks( fas );
   }

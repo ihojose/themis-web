@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FaIconLibrary, FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { Router } from "@angular/router";
+import moment from "moment/moment";
 
 @Component( {
   selector: 'themis-welcome',
@@ -13,6 +14,8 @@ import { Router } from "@angular/router";
   styleUrl: './welcome.component.scss'
 } )
 export class WelcomeComponent {
+  public currentYear: number = moment().year();
+
   constructor( private icons: FaIconLibrary, private router: Router ) {
     this.icons.addIconPacks( fas );
   }
