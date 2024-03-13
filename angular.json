@@ -58,8 +58,8 @@
               "sourceMap": true,
               "fileReplacements": [
                 {
-                  "replace": "projects/expert/src/environments/environment.ts",
-                  "with": "projects/expert/src/environments/environment.development.ts"
+                  "replace": "projects/expert/src/environments/environment.development.ts",
+                  "with": "projects/expert/src/environments/environment.ts"
                 }
               ]
             }

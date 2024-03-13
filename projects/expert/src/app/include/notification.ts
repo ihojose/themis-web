@@ -26,4 +26,13 @@ export class Notification {
       // ...
     } );
   }
+
+  public static warning( message: string, opts: {} = {} ): void {
+    new Notification().toast.fire( {
+      icon: 'warning',
+      title: message
+    } ).then( val => {
+      // ..
+    } );
+  }
 }

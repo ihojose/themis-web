@@ -1,0 +1,18 @@
+@import "variables";
+
+.data-content {
+  margin-top: 2rem;
+}
+
+.data-table {
+  width: 100%;
+  border-spacing: 0;
+
+  tbody {
+    background-color: rgba($background-color, .6);
+
+    th {
+      padding: .5rem 0;
+    }
+  }
+}

@@ -5,6 +5,9 @@ export const environment: any = {
     duration: 5000
   },
   api: {
-    auth: `${ host }/account/auth`
+    auth: `${ host }/account/auth`,
+    get_sessions: `${ host }/session/{user}`,
+    get_history: `${ host }/history/session/{session}`,
+    get_roles: `${ host }/role`,
   }
 };

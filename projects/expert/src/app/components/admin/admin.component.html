@@ -1,0 +1,17 @@
+<div class="admin-content">
+  <div class="sidebar">
+    <ul>
+      @for (item of sidebar; track $index) {
+        <li>
+          <a [routerLink]="item.link" routerLinkActive="active">
+            <fa-icon [icon]="item.icon"></fa-icon>
+            {{ item.title }}
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+  <div class="content">
+    <router-outlet/>
+  </div>
+</div>

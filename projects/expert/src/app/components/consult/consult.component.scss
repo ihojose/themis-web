@@ -131,15 +131,24 @@
       .item {
         overflow: hidden;
         border-radius: 10px;
+        margin-bottom: 1rem;
 
         > .item-header {
           background-color: $dark-light-color-2;
           padding: 1.3rem;
+          font-weight: 600;
+          letter-spacing: 2px;
         }
 
         > .item-content {
           background-color: $card-color;
           padding: 1.3rem;
+
+          .typing {
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3.5s steps(50, end);
+          }
 
           .options {
             margin-top: 1.5rem;

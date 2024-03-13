@@ -16,3 +16,13 @@ $danger-color: hsl(0, 93%, 47%);
 $transition: 1.2s;
 $navbar-height: 70px;
 $footer-height: 50px;
+
+// keyframes
+@keyframes typing {
+  from {
+    width: 0
+  }
+  to {
+    width: 100%
+  }
+}

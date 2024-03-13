@@ -17,36 +17,25 @@
     <!-- session list -->
     <div id="sessions" class="sessions">
       <ul>
-        <li class="active">
-          <div class="icon-cont">
-            <div class="icon-i">
-              <fa-icon [icon]="['fas', 'diagram-predecessor']"></fa-icon>
+        @for (session of sessions; track session.id) {
+          <li [class.active]="activeSession === session.id" (click)="selectSession(session.id)">
+            <div class="icon-cont">
+              <div class="icon-i">
+                <fa-icon [icon]="['fas', 'diagram-predecessor']"></fa-icon>
+              </div>
             </div>
-          </div>
-          <div class="text">
-            Elemento del menú
-          </div>
-          <div class="delete-cont">
-            <div class="icon-i">
-              <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+            <div class="text">
+              {{ session.date | date: 'dd/MM/YYYY HH:mm' }}
             </div>
-          </div>
-        </li>
-        <li>
-          <div class="icon-cont">
-            <div class="icon-i">
-              <fa-icon [icon]="['fas', 'diagram-predecessor']"></fa-icon>
+            <div class="delete-cont">
+              <div class="icon-i" (click)="deleteSession()">
+                <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+              </div>
             </div>
-          </div>
-          <div class="text">
-            Elemento del menú
-          </div>
-          <div class="delete-cont">
-            <div class="icon-i">
-              <fa-icon [icon]="['fas', 'minus']"></fa-icon>
-            </div>
-          </div>
-        </li>
+          </li>
+        } @empty {
+          <li>No has hecho consultas</li>
+        }
       </ul>
     </div>
     <!-- end session list -->
@@ -58,35 +47,33 @@
   <div class="chat animate__animated animate__fadeIn">
 
     <div class="chat-timeline">
+      @for (history of historyList; track history.id) {
+        <div class="item animate__animated animate__fadeIn">
+          <div class="item-header">
+            {{ APP_NAME }}
+          </div>
+          <div class="item-content">
+            {{ history.aggravating }}
 
-      <!-- chat item -->
-      <div class="item">
-        <div class="item-header">
-          Hi
-        </div>
-        <div class="item-content">
-          Description
+            <div class="options">
 
-          <div class="options">
+              <button class="option active" disabled>
+                {{ history.answer_text }}
+              </button>
 
-            <button class="option active">
-              Sí
-            </button>
-            <button class="option active" disabled>
-              Sí
-            </button>
-            <button class="option">
-              No
-            </button>
-            <button class="option" disabled>
-              No
-            </button>
-
+            </div>
           </div>
         </div>
-      </div>
-      <!-- end chat item -->
-
+      } @empty {
+        <div class="item animate__animated animate__fadeIn">
+          <div class="item-header">
+            {{ APP_NAME }}
+          </div>
+          <div class="item-content">
+            <div class="typing">Esta sesión no tiene historial de actividad...</div>
+          </div>
+        </div>
+      }
     </div>
 
   </div>

@@ -3,6 +3,8 @@ import { AuthenticationComponent } from "./components/authentication/authenticat
 import { ExpertComponent } from "./components/expert/expert.component";
 import { WelcomeComponent } from "./components/welcome/welcome.component";
 import { ConsultComponent } from "./components/consult/consult.component";
+import { AdminComponent } from "./components/admin/admin.component";
+import { AdminRolesComponent } from "./components/admin-roles/admin-roles.component";
 
 export const routes: Routes = [ {
   path: 'auth',
@@ -19,6 +21,15 @@ export const routes: Routes = [ {
     path: 'consult',
     component: ConsultComponent,
     title: 'Consulta legal'
+  }, {
+    path: 'admin',
+    component: AdminComponent,
+    title: 'Administración',
+    children: [ {
+      path: 'roles',
+      component: AdminRolesComponent,
+      title: 'Roles'
+    } ]
   } ]
 }, {
   path: '**',

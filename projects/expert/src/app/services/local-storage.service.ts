@@ -16,4 +16,8 @@ export class LocalStorageService {
   public get( key: string ): string {
     return this.storage.get( key );
   }
+
+  public delete( key: string ): void {
+    this.storage.remove( key );
+  }
 }
