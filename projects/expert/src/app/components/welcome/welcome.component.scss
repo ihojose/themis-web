@@ -3,6 +3,8 @@
 .welcome-content {
   margin: 0 auto;
   width: 800px;
+  padding-top: 1rem;
+  padding-bottom: calc(50px + 1rem);
 
   .header {
     display: flex;

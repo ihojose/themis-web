@@ -4,13 +4,36 @@
 
   <div class="data-content">
     <table class="data-table">
-      <tbody>
+      <thead>
       <tr>
         <th>ID</th>
-        <th>Título</th>
+        <th>Nombre</th>
         <th>Descripción</th>
         <th>Permisos</th>
+        <th></th>
       </tr>
+      </thead>
+      <tbody>
+        @for (role of roles; track role.id) {
+          <tr>
+            <td class="right">{{ role.id }}</td>
+            <td><input class="input-control" [(ngModel)]="role.name"></td>
+            <td><input class="input-control" [(ngModel)]="role.description"></td>
+            <td>{{ size( role.permissions! || [] ) }}</td>
+            <td>
+              <div class="">
+                <button class="ellipsis-menu" [matMenuTriggerFor]="menu">
+                  <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <ul>
+                    <li>Hi</li>
+                  </ul>
+                </mat-menu>
+              </div>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>

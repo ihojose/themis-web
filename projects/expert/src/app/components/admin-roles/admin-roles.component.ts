@@ -4,11 +4,20 @@ import { Response } from "../../model/response.model";
 import { RoleModel } from "../../model/role.model";
 import { MESSAGE_ERROR } from "../../../environments/messages";
 import { Notification } from "../../include/notification";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FaIconLibrary, FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { MatMenuModule } from "@angular/material/menu";
 
 @Component( {
   selector: 'themis-admin-roles',
   standalone: true,
-  imports: [],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    FontAwesomeModule,
+    MatMenuModule
+  ],
   templateUrl: './admin-roles.component.html',
   styleUrl: './admin-roles.component.scss'
 } )
@@ -16,7 +25,8 @@ export class AdminRolesComponent implements OnInit {
   public loading: boolean = false;
   public roles: RoleModel[] = [];
 
-  constructor( private api: RolesService ) {
+  constructor( private api: RolesService, private icons: FaIconLibrary ) {
+    this.icons.addIconPacks( fas );
   }
 
   ngOnInit(): void {
@@ -34,5 +44,9 @@ export class AdminRolesComponent implements OnInit {
         Notification.danger( err.error.message || MESSAGE_ERROR );
       }
     } )
+  }
+
+  public size( val: any[] ): number {
+    return val.length || 0;
   }
 }

@@ -8,11 +8,29 @@
   width: 100%;
   border-spacing: 0;
 
-  tbody {
+  thead {
     background-color: rgba($background-color, .6);
 
     th {
       padding: .5rem 0;
+    }
+  }
+
+  tbody {
+    td {
+      padding: .5rem .5rem;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+
+      &.right {
+        text-align: right;
+      }
     }
   }
 }

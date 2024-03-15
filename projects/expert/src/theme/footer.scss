@@ -4,7 +4,7 @@ footer {
   background-color: rgba($dark-light-color, .5);
   box-shadow: 0 -5px 8px rgba(black, .1);
   color: rgba($primary-text-color, .5);
-  position: absolute;
+  position: fixed;
   bottom: 0;
   height: $footer-height;
   width: 100%;
