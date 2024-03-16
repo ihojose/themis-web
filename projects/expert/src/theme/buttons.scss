@@ -35,6 +35,12 @@
     min-width: 180px;
   }
 
+  &.small {
+    font-size: 12px;
+    height: 30px;
+    padding: 0 15px;
+  }
+
   &.primary {
     background-color: $secondary-color;
 
@@ -75,5 +81,19 @@
   &:hover {
     background-color: $light-color-2;
     color: $secondary-color;
+  }
+}
+
+.ellipsis-menu {
+  background-color: $secondary-color;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all 300ms;
+
+  &:hover {
+    background-color: rgba($secondary-color, .8);
   }
 }

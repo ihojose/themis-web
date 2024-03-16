@@ -10,5 +10,8 @@
  * This file was write by Jose Buelvas <jbuelva@bancodebogota.com.co>.
  */
 export interface PermissionModel {
-
+  id?: number;
+  name: string;
+  description: string;
+  role: number;
 }

@@ -31,6 +31,32 @@
       &.right {
         text-align: right;
       }
+
+      input {
+        transition: all 300ms;
+
+        &.control {
+          outline: none;
+          background-color: rgba($background-color, .9);
+          color: white;
+          border: 0;
+          border-bottom: 2px solid white;
+          width: 100%;
+          padding: .3rem 1rem;
+          border-radius: 5px 5px 0 0;
+
+          &:disabled {
+            background-color: transparent;
+            padding: 0;
+            border-bottom: 0;
+            cursor: text;
+          }
+        }
+      }
     }
   }
+}
+
+.swal2-backdrop-show {
+  backdrop-filter: blur(2px);
 }

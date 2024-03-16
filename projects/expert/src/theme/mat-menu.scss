@@ -1,0 +1,24 @@
+@import "variables";
+
+.mat-mdc-menu-panel {
+  background-color: $dark-light-color-2 !important;
+
+  ul {
+    list-style-type: none;
+
+    > li {
+      padding: .5rem 1rem;
+      cursor: pointer;
+      transition: all 300ms;
+
+      &:hover {
+        background-color: rgba($background-color, .5);
+      }
+
+      &.delete {
+        color: rgba($danger-color, .9);
+      }
+    }
+  }
+}
+

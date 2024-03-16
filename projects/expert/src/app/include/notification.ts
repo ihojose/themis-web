@@ -1,4 +1,4 @@
-import Swal from "sweetalert2";
+import Swal, { SweetAlertResult } from "sweetalert2";
 import { environment } from "../../environments/environment.development";
 
 export class Notification {
@@ -33,6 +33,14 @@ export class Notification {
       title: message
     } ).then( val => {
       // ..
+    } );
+  }
+
+  public static success( message: string, opts: {} = {} ): void {
+    new Notification().toast.fire( {
+      icon: 'success',
+      title: message
+    } ).then( ( val: SweetAlertResult ): void => {
     } );
   }
 }

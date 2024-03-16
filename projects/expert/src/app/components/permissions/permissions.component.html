@@ -1,1 +1,80 @@
-<p>permissions works!</p>
+<h2 mat-dialog-title>Permisos del rol {{ role.name || '' }}</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading animate__animated animate__fadeIn">
+      <fa-icon [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+    </div>
+  }
+
+  <table class="data-table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (p of role.permissions; track p.id!) {
+        <tr>
+          <td>{{ p.id! }}</td>
+          <td><input class="control" [(ngModel)]="p.name" [disabled]="selected !== p.id!"></td>
+          <td><input class="control" [(ngModel)]="p.description" [disabled]="selected !== p.id!"></td>
+          <td>
+            <div>
+              @if (selected !== p.id!) {
+                <button class="ellipsis-menu" [matMenuTriggerFor]="menu">
+                  <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+                </button>
+                <mat-menu #menu="matMenu" xPosition="before">
+                  <ul>
+                    <!-- <li (click)="edit(p)">
+                      <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                      Editar
+                    </li> -->
+                    <li class="delete" (click)="delete(p)">
+                      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                      Eliminar
+                    </li>
+                  </ul>
+                </mat-menu>
+              } @else {
+                <button matTooltip="Cancelar" class="ellipsis-menu mrp-3" (click)="cancel(role)">
+                  <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                </button>
+                <button matTooltip="Guardar cambios" class="ellipsis-menu">
+                  <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
+                </button>
+              }
+            </div>
+          </td>
+        </tr>
+      }
+    <tr>
+      <td>{{ enableAdd ? '#' : '' }}</td>
+      <td><input class="control" [(ngModel)]="add.name" [disabled]="!enableAdd"></td>
+      <td><input class="control" [(ngModel)]="add.description" [disabled]="!enableAdd"></td>
+      <td>
+        <div>
+          @if (enableAdd) {
+            <button matTooltip="Cancelar" class="ellipsis-menu mrp-3" (click)="cancel(role)">
+              <fa-icon [icon]="['fas', 'times']"></fa-icon>
+            </button>
+            <button matTooltip="Guardar cambios" class="ellipsis-menu" (click)="addPermission()">
+              <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
+            </button>
+          } @else {
+            <button matTooltip="Agregar permiso" class="ellipsis-menu mrp-3" (click)="startAdd()">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+            </button>
+          }
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="button" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

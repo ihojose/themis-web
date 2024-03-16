@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Registrar nuevo rol</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading animate__animated animate__fadeIn">
+      <fa-icon [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+    </div>
+  }
+
+  <form class="form" [formGroup]="form">
+    <div class="grid-2">
+      <div class="group pds-5px">
+        <label for="name">Nombre</label>
+        <input id="name" formControlName="name" class="control w-200 text-uppercase" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+      <div class="group pds-5px">
+        <label for="description">Descripción</label>
+        <input id="description" formControlName="description" class="control w-200" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="button mrr-1" mat-dialog-close>Cancelar</button>
+  <button class="button primary" (click)="addRole()">Registrar</button>
+</mat-dialog-actions>

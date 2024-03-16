@@ -1,7 +1,7 @@
 <!-- header control -->
 <header id="header">
   <div class="left">
-    <div class="app-logo">
+    <div class="app-logo" (click)="link(['/expert/consult'])">
       <div class="icon-cont">
         <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
       </div>
@@ -24,6 +24,14 @@
 
       <div class="nav" [class.menu]="menu" #menuElement>
         <ul>
+          <li (click)="link(['/expert/consult'])">
+            <div class="icon">
+              <div class="cover">
+                <fa-icon [icon]="['fas', 'message']"></fa-icon>
+              </div>
+            </div>
+            <div class="desc">Panel de consulta</div>
+          </li>
           <li>
             <div class="icon">
               <div class="cover">

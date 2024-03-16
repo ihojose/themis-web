@@ -17,6 +17,11 @@ $transition: 1.2s;
 $navbar-height: 70px;
 $footer-height: 50px;
 
+// sizes
+$paddings: (5px, 10px);
+$rem-margins: (1, 2, 3);
+$px-margins: (3, 4, 5, 8, 10, 15);
+
 // keyframes
 @keyframes typing {
   from {

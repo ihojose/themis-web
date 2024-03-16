@@ -54,4 +54,15 @@
       }
     }
   }
+
+  // sect
+  .title {
+    position: relative;
+
+    .control {
+      position: absolute;
+      right: 0;
+      top: .5rem;
+    }
+  }
 }

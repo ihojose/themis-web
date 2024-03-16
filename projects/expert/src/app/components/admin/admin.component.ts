@@ -35,10 +35,6 @@ export class AdminComponent {
       icon: [ 'fas', 'building-lock' ],
       link: [ '/expert/admin/roles' ]
     }, {
-      title: 'Permisos',
-      icon: [ 'fas', 'lock-open' ],
-      link: [ '/expert/admin/permissions' ]
-    }, {
       title: 'Leyes',
       icon: [ 'fas', 'scale-balanced' ],
       link: [ '/expert/admin/law' ]

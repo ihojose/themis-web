@@ -13,3 +13,31 @@ body {
   color: $primary-text-color;
 }
 
+// paddings
+@each $padding in $paddings {
+  .pd-#{$padding} {
+    padding: $padding;
+  }
+
+  .pds-#{$padding} {
+    padding: 0 $padding;
+  }
+}
+
+// texts
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+// margins
+@each $margin in $rem-margins {
+  .mrr-#{$margin} {
+    margin-right: #{$margin}rem;
+  }
+}
+
+@each $margin in $px-margins {
+  .mrp-#{$margin} {
+    margin-right: #{$margin}px;
+  }
+}
