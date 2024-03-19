@@ -36,7 +36,7 @@ export class EditComponent {
     this.role = this.data;
 
     this.form = this.builder.group( {
-      name: [ { value: this.role.name, disabled: false }, [ Validators.required ] ],
+      name: [ { value: this.role.name, disabled: true }, [ Validators.required ] ],
       description: [ { value: this.role.description, disabled: false }, [ Validators.required ] ],
     } );
   }

@@ -1,1 +1,54 @@
-<p>admin-laws works!</p>
+<div>
+  <div class="title">
+    <h2>Administración de Leyes</h2>
+    <div class="desc">Panel de gestión de leyes.</div>
+
+    <div class="control">
+      <button class="button primary small">
+        <fa-icon [icon]="['fas', 'file-circle-plus']"></fa-icon>
+        Agregar ley
+      </button>
+    </div>
+  </div>
+
+  <div class="data-content">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>Ley #</th>
+        <th>Fecha</th>
+        <th>Título</th>
+        <th>Descripción</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (law of laws; track law.number) {
+          <tr>
+            <td class="center">{{ law.number }}</td>
+            <td class="center">{{ law.date | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ law.title }}</td>
+            <td>{{ law.description }}</td>
+            <td>
+              <button class="ellipsis-menu" [matMenuTriggerFor]="menu">
+                <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <ul>
+                  <li (click)="null">
+                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                    Editar
+                  </li>
+                  <li class="delete" (click)="null">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    Eliminar
+                  </li>
+                </ul>
+              </mat-menu>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

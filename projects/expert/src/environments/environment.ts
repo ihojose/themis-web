@@ -16,5 +16,11 @@ export const environment: any = {
     add_permission: `${ host }/permission`,
     edit_permission: `${ host }/permission/{id}`,
     delete_permission: `${ host }/permission/{id}`,
+    get_laws: `${ host }/law`,
+    get_law: `${ host }/law/{id}`,
+    add_law: `${ host }/law`,
+    edit_law: `${ host }/law/{id}`,
+    delete_law: `${ host }/law/{id}`,
+    get_articles: `${ host }/article/{id}`,
   }
 };
