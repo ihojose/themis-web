@@ -29,6 +29,14 @@ export class LawService {
   }
 
   /**
+   * Add a new Law
+   * @param data Law Entity
+   */
+  public add( data: LawModel ): Observable<Response<LawModel>> {
+    return this.http.post<Response<LawModel>>( environment.api.add_law, data );
+  }
+
+  /**
    * Modify law data.
    * @param data Law Entity
    */

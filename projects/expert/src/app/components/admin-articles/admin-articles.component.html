@@ -1,1 +1,72 @@
-<p>admin-articles works!</p>
+<div>
+  <div class="title">
+    <h2>Administración de Artículos</h2>
+    <div class="desc">Panel de gestión de artículos de leyes.</div>
+
+    <div class="control">
+      <button class="button primary small" (click)="openAdd()">
+        <fa-icon [icon]="['fas', 'file-circle-plus']"></fa-icon>
+        Agregar artículo
+      </button>
+    </div>
+  </div>
+
+  <div class="dash-control">
+    <div class="group">
+      <select (change)="selectLaw()" [(ngModel)]="selectedLaw" class="input-control">
+        <option selected [value]="undefined">Seleccionar Ley [...]</option>
+        @for (law of laws; track $index) {
+          <option [value]="law.id">Ley {{ law.number }} de {{ law.date | date: 'yyyy' }} - {{ law.title }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="data-content">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Ordinal</th>
+        <th>Descripción</th>
+        <th>Sentencia</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (article of articles; track article.ordinal) {
+          <tr>
+            <td class="center">{{ article.number }}</td>
+            <td class="center">{{ article.ordinal }}</td>
+            <td>{{ article.description }}</td>
+            <td>{{ article.min_months }} a {{ article.max_months }} <br/>meses</td>
+            <td class="right">
+              <button class="ellipsis-menu" [matMenuTriggerFor]="menu">
+                <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <ul>
+                  <li (click)="openEdit(article)">
+                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                    Editar
+                  </li>
+                  <li class="delete" (click)="delete(article)">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    Eliminar
+                  </li>
+                </ul>
+              </mat-menu>
+            </td>
+          </tr>
+        }
+
+        @if (articles.length === 0) {
+          <tr>
+            <td colspan="6" class="center">No hay artículos agregados...</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>

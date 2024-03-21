@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>Editar artículo {{ data.number }} de la ley {{ data.law }}</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading animate__animated animate__fadeIn">
+      <fa-icon [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+    </div>
+  }
+
+  <form class="form" [formGroup]="form">
+    <div class="grid-2 mtr-1">
+      <div class="group pds-5px">
+        <label for="number">Artículo número #</label>
+        <input id="number" [inputMask]="numberMask" formControlName="number" class="control text-uppercase" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+      <div class="group pds-5px">
+        <label for="ordinal">Ordinal</label>
+        <input id="ordinal" [inputMask]="numberMask" formControlName="ordinal" class="control" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+    <div class="mtr-1">
+      <div class="group pds-5px">
+        <label for="description">Descripción</label>
+        <textarea class="control" formControlName="description" id="description"></textarea>
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+    <div class="grid-2 mtr-1">
+      <div class="group pds-5px">
+        <label for="min">Sentencia mínima (meses)</label>
+        <input id="min" [inputMask]="numberMask" formControlName="min" class="control text-uppercase" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+      <div class="group pds-5px">
+        <label for="max">Sentencia máxima (meses)</label>
+        <input id="max" [inputMask]="numberMask" formControlName="max" class="control" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="button mrr-1" mat-dialog-close>Cancelar</button>
+  <button class="button primary" (click)="edit()">Modificar</button>
+</mat-dialog-actions>

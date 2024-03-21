@@ -4,7 +4,7 @@
     <div class="desc">Panel de gestión de leyes.</div>
 
     <div class="control">
-      <button class="button primary small">
+      <button class="button primary small" (click)="openAdd()">
         <fa-icon [icon]="['fas', 'file-circle-plus']"></fa-icon>
         Agregar ley
       </button>
@@ -39,7 +39,7 @@
                     <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
                     Editar
                   </li>
-                  <li class="delete" (click)="null">
+                  <li class="delete" (click)="delete(law)">
                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                     Eliminar
                   </li>

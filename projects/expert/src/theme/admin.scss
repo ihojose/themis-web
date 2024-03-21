@@ -33,7 +33,7 @@
 
           &.active,
           &:hover {
-            background-color: rgba($background-color, .9);
+            background-color: rgba($dark-light-color-2, .9);
           }
         }
 
@@ -63,6 +63,17 @@
       position: absolute;
       right: 0;
       top: .5rem;
+    }
+  }
+}
+
+.dash-control {
+  margin-top: 1.5rem;
+
+  .group {
+    > label {
+      text-transform: uppercase;
+      font-weight: 700;
     }
   }
 }

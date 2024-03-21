@@ -37,7 +37,7 @@ export class AdminComponent {
     }, {
       title: 'Leyes',
       icon: [ 'fas', 'scale-balanced' ],
-      link: [ '/expert/admin/law' ]
+      link: [ '/expert/admin/laws' ]
     }, {
       title: 'Artículos',
       icon: [ 'fas', 'file-contract' ],

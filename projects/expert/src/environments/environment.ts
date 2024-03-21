@@ -22,5 +22,8 @@ export const environment: any = {
     edit_law: `${ host }/law/{id}`,
     delete_law: `${ host }/law/{id}`,
     get_articles: `${ host }/article/{id}`,
+    add_article: `${ host }/article`,
+    edit_article: `${ host }/article/{id}`,
+    delete_article: `${ host }/article/{id}`,
   }
 };

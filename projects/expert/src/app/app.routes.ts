@@ -39,7 +39,7 @@ export const routes: Routes = [ {
       component: AdminAccountsComponent,
       title: 'Administración de cuentas'
     }, {
-      path: 'law',
+      path: 'laws',
       component: AdminLawsComponent,
       title: 'Administración de Leyes'
     }, {

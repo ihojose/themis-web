@@ -31,5 +31,8 @@ export const environment: any = {
 
     // article
     get_articles: `${ host }/article/{id}`,
+    add_article: `${ host }/article`,
+    edit_article: `${ host }/article/{id}`,
+    delete_article: `${ host }/article/{id}`,
   }
 };

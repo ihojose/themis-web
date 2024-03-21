@@ -34,6 +34,10 @@ body {
   .mrr-#{$margin} {
     margin-right: #{$margin}rem;
   }
+
+  .mtr-#{$margin} {
+    margin-top: #{$margin}rem;
+  }
 }
 
 @each $margin in $px-margins {
