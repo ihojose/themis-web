@@ -1,1 +1,28 @@
-<p>admin-decisition-tree works!</p>
+<div>
+  <div class="title">
+    <h2>Árbol de desición</h2>
+    <div class="desc">Panel de gestión del árbol de decisión.</div>
+
+    <div class="control">
+      <!-- <button class="button primary small" (click)="null">
+        <fa-icon [icon]="['fas', 'file-circle-plus']"></fa-icon>
+        Agregar item
+      </button> -->
+    </div>
+  </div>
+
+  <div class="dash-control">
+    <div class="group">
+      <select (change)="selectLaw()" [(ngModel)]="selectedLaw" class="input-control">
+        <option selected [value]="undefined">Seleccionar Ley [...]</option>
+        @for (law of laws; track $index) {
+          <option [value]="law.id">Ley {{ law.number }} de {{ law.date | date: 'yyyy' }} - {{ law.title }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div id="decision-tree" class="graph-tree"></div>
+
+
+</div>

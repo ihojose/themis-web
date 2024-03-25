@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   width: 1200px;
-  margin: 8rem auto 1rem auto;
+  margin: 8rem auto 5rem auto;
   background-color: $card-color;
   box-shadow: 10px 10px 10px rgba(black, .2), -10px -10px 10px rgba($dark-light-color, .2);
   border-radius: 8px;
