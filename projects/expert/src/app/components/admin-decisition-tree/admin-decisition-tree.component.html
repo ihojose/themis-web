@@ -16,7 +16,7 @@
       <select (change)="selectLaw()" [(ngModel)]="selectedLaw" class="input-control">
         <option selected [value]="undefined">Seleccionar Ley [...]</option>
         @for (law of laws; track $index) {
-          <option [value]="law.id">Ley {{ law.number }} de {{ law.date | date: 'yyyy' }} - {{ law.title }}</option>
+          <option [value]="toJson(law)">Ley {{ law.number }} de {{ law.date | date: 'yyyy' }} - {{ law.title }}</option>
         }
       </select>
     </div>
@@ -24,5 +24,23 @@
 
   <div id="decision-tree" class="graph-tree"></div>
 
-
+  <div class="data-content">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Pregunta (Regla)</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (r of rules; track r.id) {
+          <tr>
+            <td class="center">{{ r.id }}</td>
+            <td>{{ r.question }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>

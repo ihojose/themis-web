@@ -26,6 +26,7 @@ export const environment: any = {
     edit_article: `${ host }/article/{id}`,
     delete_article: `${ host }/article/{id}`,
     get_aggravating: `${ host }/aggravating/{id}`,
+    get_aggravating_list: `${ host }/aggravating`,
     get_aggravating_by_article: `${ host }/aggravating/article/{id}`,
     add_aggravating: `${ host }/aggravating`,
     edit_aggravating: `${ host }/aggravating/{id}`,
