@@ -96,4 +96,9 @@
   &:hover {
     background-color: rgba($secondary-color, .8);
   }
+
+  &.danger {
+    background-color: rgba($danger-color, .8);
+    color: white;
+  }
 }

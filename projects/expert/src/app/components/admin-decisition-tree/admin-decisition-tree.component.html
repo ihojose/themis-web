@@ -1,6 +1,6 @@
 <div>
   <div class="title">
-    <h2>Árbol de desición</h2>
+    <h2>Árbol de decisión</h2>
     <div class="desc">Panel de gestión del árbol de decisión.</div>
 
     <div class="control">
@@ -24,12 +24,23 @@
 
   <div id="decision-tree" class="graph-tree"></div>
 
+  <div class="title">
+    <h2>Reglas</h2>
+    <div class="control">
+      <button class="button primary small" [disabled]="!selectedLaw" (click)="openAdd()">
+        <fa-icon [icon]="['fas', 'file-circle-plus']"></fa-icon>
+        Agregar regla
+      </button>
+    </div>
+  </div>
+
   <div class="data-content">
     <table class="data-table">
       <thead>
       <tr>
         <th>#</th>
         <th>Pregunta (Regla)</th>
+        <th>Respuestas</th>
         <th></th>
       </tr>
       </thead>
@@ -38,6 +49,7 @@
           <tr>
             <td class="center">{{ r.id }}</td>
             <td>{{ r.question }}</td>
+            <td class="center">{{ r.answers.length }}</td>
           </tr>
         }
       </tbody>

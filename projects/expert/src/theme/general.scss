@@ -38,6 +38,10 @@ body {
   .mtr-#{$margin} {
     margin-top: #{$margin}rem;
   }
+
+  .mbr-#{$margin} {
+    margin-bottom: #{$margin}rem;
+  }
 }
 
 @each $margin in $px-margins {

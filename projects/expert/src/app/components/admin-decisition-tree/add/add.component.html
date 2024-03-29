@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>Agregar regla de decisión en la ley {{ data.law.number }}</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading animate__animated animate__fadeIn">
+      <fa-icon [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+    </div>
+  }
+
+  <form class="form" [formGroup]="rule">
+    <div class="mtr-1">
+      <div class="group pds-5px">
+        <label for="question">Pregunta</label>
+        <input id="question" formControlName="question" class="control" autocomplete="off" placeholder="¿...?">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+    <div class="mtr-1">
+      <div class="group pds-5px">
+        <label for="article">Artículo</label>
+        <select id="article" formControlName="article" class="input-control">
+          @for (a of data.articles; track $index) {
+            <option [value]="a.id">Artículo {{ a.number }} - {{ a.description }}</option>
+          }
+        </select>
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+
+    <div class="title">
+      <h5>Respuestas</h5>
+    </div>
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>Respuesta</th>
+        <th>Pregunta destino</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody formArrayName="answers">
+        @for (a of getAnswers().controls; track $index) {
+          <tr [formGroupName]="$index">
+            <td>
+              <input class="control" formControlName="description">
+            </td>
+            <td>
+              <select class="control">
+                @for (ans of data.rules; track $index) {
+                  <option [value]="ans.id">{{ ans.question }}</option>
+                  <option [value]="null">No tiene destino</option>
+                }
+              </select>
+            </td>
+            <td>
+              <button class="ellipsis-menu danger" (click)="removeAnswer( rule.get('answers')!, $index)">
+                <fa-icon [icon]="['fas', 'times']"></fa-icon>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <button class="button primary small" (click)="addAnswer()">
+      <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+      Agregar respuesta
+    </button>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="button mrr-1" mat-dialog-close>Cancelar</button>
+  <button class="button primary" (click)="add()">Agregar regla</button>
+</mat-dialog-actions>

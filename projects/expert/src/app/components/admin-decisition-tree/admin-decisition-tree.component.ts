@@ -13,6 +13,8 @@ import { ArticleService } from "../../services/article.service";
 import { ArticleModel } from "../../model/article.model";
 import { DecisionTreeService } from "../../services/decision-tree.service";
 import { AggravatingModel } from "../../model/aggravating.model";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { AddComponent } from "./add/add.component";
 
 @Component( {
   selector: 'themis-admin-decisition-tree',
@@ -21,7 +23,8 @@ import { AggravatingModel } from "../../model/aggravating.model";
     FaIconComponent,
     GojsAngularModule,
     DatePipe,
-    FormsModule
+    FormsModule,
+    MatDialogModule
   ],
   templateUrl: './admin-decisition-tree.component.html',
   styleUrl: './admin-decisition-tree.component.scss',
@@ -37,7 +40,8 @@ export class AdminDecisitionTreeComponent implements AfterViewInit {
 
   constructor( private lawApi: LawService,
                private api: DecisionTreeService,
-               private articleApi: ArticleService ) {
+               private articleApi: ArticleService,
+               private dialog: MatDialog ) {
   }
 
   ngAfterViewInit(): void {
@@ -67,6 +71,22 @@ export class AdminDecisitionTreeComponent implements AfterViewInit {
         description: r.question.replace( /(?![^\n]{1,32}$)([^\n]{1,32})\s/g, '$1\n' ),
       } );
     }
+  }
+
+  public openAdd(): void {
+    this.dialog.open( AddComponent, {
+      width: '800px',
+      disableClose: true,
+      data: {
+        law: this.law,
+        articles: Object.values( this.articles ),
+        rules: this.rules
+      }
+    } ).afterClosed().subscribe( {
+      next: ( value: any ): void => {
+
+      }
+    } );
   }
 
   private getLaws(): void {
