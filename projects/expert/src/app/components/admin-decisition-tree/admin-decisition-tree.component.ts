@@ -15,6 +15,9 @@ import { DecisionTreeService } from "../../services/decision-tree.service";
 import { AggravatingModel } from "../../model/aggravating.model";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { AddComponent } from "./add/add.component";
+import { Modal } from "../../include/modal";
+import { MatMenuModule } from "@angular/material/menu";
+import { EditComponent } from "./edit/edit.component";
 
 @Component( {
   selector: 'themis-admin-decisition-tree',
@@ -24,7 +27,8 @@ import { AddComponent } from "./add/add.component";
     GojsAngularModule,
     DatePipe,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatMenuModule
   ],
   templateUrl: './admin-decisition-tree.component.html',
   styleUrl: './admin-decisition-tree.component.scss',
@@ -70,7 +74,38 @@ export class AdminDecisitionTreeComponent implements AfterViewInit {
         title: `Regla ${ r.id }, Artículo ${ this.articles[ r.article ].number }`,
         description: r.question.replace( /(?![^\n]{1,32}$)([^\n]{1,32})\s/g, '$1\n' ),
       } );
+
+      for ( let a of r.answers! ) {
+        if ( a.next_aggravating !== null ) {
+          // @ts-ignore
+          this.diagram?.model.addLinkData( {
+            from: r.id,
+            to: a.next_aggravating,
+            text: a.description
+          } );
+        }
+      }
     }
+  }
+
+  public deleteRule( i: AggravatingModel ): void {
+    Modal.question( {
+      title: `¿Deseas eliminar esta regla de decisión?`,
+      text: `Regla: ${ i.question }`,
+      confirmText: 'Eliminar',
+      onConfirm: (): void => {
+        Modal.loading().then();
+        this.api.deleteRule( i.id! ).subscribe( {
+          next: (): void => {
+            this.selectLaw();
+            Notification.success( 'Regla eliminada exitosamente' );
+          },
+          error: err => {
+            Notification.danger( err.error.message || MESSAGE_ERROR );
+          }
+        } )
+      }
+    } ).then();
   }
 
   public openAdd(): void {
@@ -84,9 +119,32 @@ export class AdminDecisitionTreeComponent implements AfterViewInit {
       }
     } ).afterClosed().subscribe( {
       next: ( value: any ): void => {
+        if ( !value ) {
+          return;
+        }
 
+        this.selectLaw();
       }
     } );
+  }
+
+  public openEdit( i: AggravatingModel ): void {
+    this.dialog.open( EditComponent, {
+      width: '800px',
+      disableClose: true,
+      data: {
+        law: this.law,
+        articles: Object.values( this.articles ),
+        rules: this.rules,
+        rule: i
+      }
+    } ).afterClosed().subscribe( {
+      next: ( value: any ): void => {
+        if ( !value ) {
+          return;
+        }
+      }
+    } )
   }
 
   private getLaws(): void {

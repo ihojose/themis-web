@@ -49,7 +49,26 @@
           <tr>
             <td class="center">{{ r.id }}</td>
             <td>{{ r.question }}</td>
-            <td class="center">{{ r.answers.length }}</td>
+            <td class="center">{{ r.answers!.length }}</td>
+            <td class="right">
+              <div>
+                <button class="ellipsis-menu" [matMenuTriggerFor]="menu">
+                  <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+                </button>
+                <mat-menu #menu="matMenu" xPosition="before">
+                  <ul>
+                    <li (click)="openEdit(r)">
+                      <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                      Editar
+                    </li>
+                    <li class="delete" (click)="deleteRule(r)">
+                      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                      Eliminar
+                    </li>
+                  </ul>
+                </mat-menu>
+              </div>
+            </td>
           </tr>
         }
       </tbody>

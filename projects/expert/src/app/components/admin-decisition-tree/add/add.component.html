@@ -38,24 +38,29 @@
       </tr>
       </thead>
       <tbody formArrayName="answers">
-        @for (a of getAnswers().controls; track $index) {
+        @for (a of answers.controls; track $index) {
           <tr [formGroupName]="$index">
             <td>
               <input class="control" formControlName="description">
             </td>
             <td>
-              <select class="control">
+              <select class="control" formControlName="next_aggravating">
+                <option [value]="null">No tiene destino</option>
                 @for (ans of data.rules; track $index) {
                   <option [value]="ans.id">{{ ans.question }}</option>
-                  <option [value]="null">No tiene destino</option>
                 }
               </select>
             </td>
             <td>
-              <button class="ellipsis-menu danger" (click)="removeAnswer( rule.get('answers')!, $index)">
+              <button class="ellipsis-menu danger" (click)="removeAnswer( $index)">
                 <fa-icon [icon]="['fas', 'times']"></fa-icon>
               </button>
             </td>
+          </tr>
+        }
+        @if (answers.controls.length === 0) {
+          <tr>
+            <td colspan="4" class="center">No tiene respuestas</td>
           </tr>
         }
       </tbody>
@@ -68,6 +73,6 @@
 
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button class="button mrr-1" mat-dialog-close>Cancelar</button>
+  <button class="button mrr-1" [mat-dialog-close]="false">Cancelar</button>
   <button class="button primary" (click)="add()">Agregar regla</button>
 </mat-dialog-actions>

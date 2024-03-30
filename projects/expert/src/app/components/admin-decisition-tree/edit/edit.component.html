@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Modificar regla {{ data.rule.question }}</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading animate__animated animate__fadeIn">
+      <fa-icon [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="button mrr-1" [mat-dialog-close]="false">Cancelar</button>
+  <button class="button primary" (click)="null">Guardar</button>
+</mat-dialog-actions>
