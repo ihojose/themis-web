@@ -52,9 +52,11 @@
               </select>
             </td>
             <td>
-              <button class="ellipsis-menu danger" (click)="removeAnswer( $index)">
-                <fa-icon [icon]="['fas', 'times']"></fa-icon>
-              </button>
+              @if ($index + 1 === answers.controls.length) {
+                <button class="ellipsis-menu danger" (click)="removeAnswer( $index)">
+                  <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                </button>
+              }
             </td>
           </tr>
         }

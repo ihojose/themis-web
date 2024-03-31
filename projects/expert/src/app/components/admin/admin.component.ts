@@ -43,6 +43,10 @@ export class AdminComponent {
       icon: [ 'fas', 'file-contract' ],
       link: [ '/expert/admin/law/article' ]
     }, {
+      title: 'Sentencias',
+      icon: [ 'fas', 'file-circle-check' ],
+      link: [ '/expert/admin/sentence' ]
+    }, {
       title: 'Árbol de desición',
       icon: [ 'fas', 'diagram-successor' ],
       link: [ '/expert/admin/tree' ]

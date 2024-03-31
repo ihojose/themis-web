@@ -6,7 +6,6 @@ import { DIALOG_DATA } from "@angular/cdk/dialog";
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { LawModel } from "../../../model/law.model";
 import { ArticleModel } from "../../../model/article.model";
-import { DatePipe } from "@angular/common";
 import { AggravatingModel } from "../../../model/aggravating.model";
 import { Notification } from "../../../include/notification";
 import { Response } from "../../../model/response.model";
@@ -82,10 +81,10 @@ export class AddComponent {
         setTimeout( (): void => {
           if ( ansrs === this.answers.controls.length ) {
             Notification.success( 'Regla registrada exitosamente.' );
-            this.dialog.close( response );
+            this.dialog.close( true );
           } else {
             this.loading = false;
-            this.dialog.close( response );
+            this.dialog.close( true );
             Notification.warning( 'La regla fue registrada, pero no se pudo registrar las respuestas.' );
           }
         }, 1000 );

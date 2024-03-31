@@ -10,6 +10,7 @@ import { AdminLawsComponent } from "./components/admin-laws/admin-laws.component
 import { AdminArticlesComponent } from "./components/admin-articles/admin-articles.component";
 import { AdminDecisitionTreeComponent } from "./components/admin-decisition-tree/admin-decisition-tree.component";
 import { AdminVerdictsComponent } from "./components/admin-verdicts/admin-verdicts.component";
+import { AdminSentenceComponent } from "./components/admin-sentence/admin-sentence.component";
 
 export const routes: Routes = [ {
   path: 'auth',
@@ -46,6 +47,10 @@ export const routes: Routes = [ {
       path: 'law/article',
       component: AdminArticlesComponent,
       title: 'Administración de artículos de las leyes'
+    }, {
+      path: 'sentence',
+      component: AdminSentenceComponent,
+      title: 'Administración de sentencias'
     }, {
       path: 'tree',
       component: AdminDecisitionTreeComponent,

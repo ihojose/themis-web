@@ -118,7 +118,7 @@ export class AdminDecisitionTreeComponent implements AfterViewInit {
         rules: this.rules
       }
     } ).afterClosed().subscribe( {
-      next: ( value: any ): void => {
+      next: ( value: boolean ): void => {
         if ( !value ) {
           return;
         }
@@ -139,10 +139,12 @@ export class AdminDecisitionTreeComponent implements AfterViewInit {
         rule: i
       }
     } ).afterClosed().subscribe( {
-      next: ( value: any ): void => {
+      next: ( value: boolean ): void => {
         if ( !value ) {
           return;
         }
+
+        this.selectLaw();
       }
     } )
   }

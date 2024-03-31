@@ -38,6 +38,22 @@ export class DecisionTreeService {
   }
 
   /**
+   * Modify Rule
+   * @param data Aggravating entity
+   */
+  public editRule( data: AggravatingModel ): Observable<Response<AggravatingModel>> {
+    return this.http.put<Response<AggravatingModel>>( environment.api.edit_aggravating.replace( '{id}', data.id!.toString() ), data );
+  }
+
+  /**
+   * Delete rule from api
+   * @param id Rule ID
+   */
+  public deleteRule( id: number ): Observable<any> {
+    return this.http.delete<any>( environment.api.delete_aggravating.replace( '{id}', id.toString() ) );
+  }
+
+  /**
    * Add rule answer
    * @param data Answer entity
    */
@@ -45,7 +61,19 @@ export class DecisionTreeService {
     return this.http.post<Response<AnswerModel>>( environment.api.add_asnwer, data );
   }
 
-  public deleteRule( id: number ): Observable<any> {
-    return this.http.delete<any>( environment.api.delete_aggravating.replace( '{id}', id.toString() ) );
+  /**
+   * Modify rule answer
+   * @param data Answer entity
+   */
+  public editAnswer( data: AnswerModel ): Observable<Response<AnswerModel>> {
+    return this.http.put<Response<AnswerModel>>( environment.api.edit_asnwer.replace( '{id}', data.id!.toString() ), data );
+  }
+
+  /**
+   * Delete rule answer
+   * @param id Answer ID
+   */
+  public deleteAnswer( id: number ): Observable<any> {
+    return this.http.delete<any>( environment.api.delete_asnwer.replace( '{id}', id.toString() ) );
   }
 }

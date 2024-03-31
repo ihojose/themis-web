@@ -5,8 +5,78 @@
       <fa-icon [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
     </div>
   }
+
+  <form class="form" [formGroup]="rule">
+    <div class="mtr-1">
+      <div class="group pds-5px">
+        <label for="question">Pregunta</label>
+        <input id="question" formControlName="question" class="control" autocomplete="off" placeholder="¿...?">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+    <div class="mtr-1">
+      <div class="group pds-5px">
+        <label for="article">Artículo</label>
+        <select id="article" formControlName="article" class="input-control">
+          @for (a of data.articles; track $index) {
+            <option [value]="a.id">Artículo {{ a.number }} - {{ a.description }}</option>
+          }
+        </select>
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+
+    <div class="title">
+      <h5>Respuestas</h5>
+    </div>
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>Respuesta</th>
+        <th>Pregunta destino</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody formArrayName="answers">
+        @for (a of answers.controls; track $index) {
+          <tr [formGroupName]="$index">
+            <td>
+              <input class="control" formControlName="description">
+            </td>
+            <td>
+              <select class="control" formControlName="next_aggravating">
+                <option [value]="null">No tiene destino</option>
+                @for (ans of data.rules; track $index) {
+                  @if (data.rule.id! !== ans.id!) {
+                    <option [value]="ans.id">{{ ans.question }}</option>
+                  }
+                }
+              </select>
+            </td>
+            <td>
+              @if ($index + 1 === answers.controls.length) {
+                <button class="ellipsis-menu danger" (click)="removeAnswer( $index, a.get('id')?.value)">
+                  <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                </button>
+              }
+            </td>
+          </tr>
+        }
+        @if (answers.controls.length === 0) {
+          <tr>
+            <td colspan="4" class="center">No tiene respuestas</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <button class="button primary small" (click)="addAnswer()">
+      <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+      Agregar respuesta
+    </button>
+
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button class="button mrr-1" [mat-dialog-close]="false">Cancelar</button>
-  <button class="button primary" (click)="null">Guardar</button>
+  <button class="button primary" (click)="save()">Guardar</button>
 </mat-dialog-actions>
