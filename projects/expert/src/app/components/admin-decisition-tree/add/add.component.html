@@ -46,7 +46,7 @@
             </td>
             <td>
               <select class="control" formControlName="next_aggravating">
-                <option [value]="null">No tiene destino</option>
+                <option value="">No tiene destino</option>
                 @for (ans of data.rules; track $index) {
                   <option [value]="ans.id">{{ ans.question }}</option>
                 }
@@ -54,8 +54,8 @@
             </td>
             <td>
               <select class="control" formControlName="sentence">
-                <option [value]="'null'">No tiene sentencia</option>
-                @for (ans of sentences; track $index) {
+                <option value="">No tiene sentencia</option>
+                @for (ans of data.sentences; track $index) {
                   <option [value]="ans.id">{{ ans.description }}</option>
                 }
               </select>

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
@@ -26,13 +26,18 @@ import { AnswerModel } from "../../../model/answer.model";
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 } )
-export class EditComponent implements OnInit {
+export class EditComponent {
   public loading: boolean = false;
   public rule: FormGroup;
   public answersToDelete: AnswerModel[] = [];
-  public sentences: SentenceModel[] = [];
 
-  constructor( @Inject( DIALOG_DATA ) public data: { law: LawModel, articles: ArticleModel[], rules: AggravatingModel[], rule: AggravatingModel },
+  constructor( @Inject( DIALOG_DATA ) public data: {
+                 law: LawModel,
+                 articles: ArticleModel[],
+                 rules: AggravatingModel[],
+                 rule: AggravatingModel,
+                 sentences: SentenceModel[],
+               },
                private dialog: MatDialogRef<EditComponent>,
                private sentenceApi: SentencesService,
                private builder: FormBuilder,
@@ -46,39 +51,12 @@ export class EditComponent implements OnInit {
 
     // add answers
     for ( let a of this.data.rule.answers! ) {
-      this.addAnswer( a.id?.toString(), a.description, a.next_aggravating?.toString(), this.getSentence( a ) );
+      this.addAnswer( a.id?.toString(), a.description, a.next_aggravating?.toString(), a.has_sentence?.sentence! > 0 ? a.has_sentence?.sentence!.toString() : '' );
     }
-  }
-
-  ngOnInit(): void {
-    this.getSentences();
   }
 
   get answers(): FormArray {
     return this.rule.get( 'answers' ) as FormArray;
-  }
-
-  private getSentence( a: AnswerModel ): string {
-    if ( a.has_sentence ) {
-      return a.has_sentence[ 0 ].sentence.toString();
-    }
-
-    return '';
-  }
-
-  // noinspection DuplicatedCode
-  public getSentences(): void {
-    this.loading = true;
-    this.sentenceApi.all().subscribe( {
-      next: ( response: Response<SentenceModel[]> ): void => {
-        this.loading = false;
-        this.sentences = response.result!;
-      },
-      error: err => {
-        this.loading = false;
-        Notification.danger( err.error.message || MESSAGE_ERROR );
-      }
-    } )
   }
 
   public addDelete( i: number ): void {
@@ -96,8 +74,9 @@ export class EditComponent implements OnInit {
     this.answers.push( this.builder.group( {
       id: [ { value: id, disabled: false }, [] ],
       description: [ { value: description, disabled: false }, [ Validators.required ] ],
-      next_aggravating: [ { value: next ? next : 'null', disabled: false }, [ Validators.required ] ],
-      sentence: [ { value: sentence ? sentence : 'null', disabled: false }, [] ],
+      next_aggravating: [ { value: next ? next : '', disabled: false }, [] ],
+      sentence: [ { value: sentence ? sentence : '', disabled: false }, [] ],
+      prev_sentence: [ { value: sentence ? sentence : '', disabled: false }, [] ],
     } ) );
   }
 
@@ -119,18 +98,6 @@ export class EditComponent implements OnInit {
         // deleted answer list
         for ( let i of this.answersToDelete ) {
 
-          // delete sentence ref
-          for ( let ref of i.has_sentence! ) {
-            this.api.deleteLinkSentence( ref.answer, ref.sentence ).subscribe( {
-              next: (): void => {
-                // ==>
-              },
-              error: err => {
-                Notification.danger( err.error.message || MESSAGE_ERROR );
-              }
-            } );
-          }
-
           // delete
           this.api.deleteAnswer( i.id! ).subscribe( {
             next: (): void => {
@@ -149,10 +116,51 @@ export class EditComponent implements OnInit {
               id: Number.parseInt( ans.get( 'id' )?.value ),
               description: ans.get( 'description' )?.value,
               aggravating: this.data.rule.id!,
-              next_aggravating: ans.get( 'next_aggravating' )?.value === 'null' ? null : Number.parseInt( ans.get( 'next_aggravating' )?.value ),
+              next_aggravating: ans.get( 'next_aggravating' )?.value ? Number.parseInt( ans.get( 'next_aggravating' )?.value ) : null,
             } ).subscribe( {
               next: (): void => {
-                // ==>
+
+                // edit, create or delete sentence association
+                if ( !ans.get( 'prev_sentence' )?.value && ans.get( 'sentence' )?.value ) {
+                  this.api.linkSentence( Number.parseInt( ans.get( 'id' )?.value ), Number.parseInt( ans.get( 'sentence' )?.value ) ).subscribe( {
+                    next: (): void => {
+                      // ==>
+                    },
+                    error: err => {
+                      Notification.danger( err.error.message || MESSAGE_ERROR );
+                    }
+                  } );
+                } else if ( ans.get( 'prev_sentence' )?.value && !ans.get( 'sentence' )?.value ) {
+                  this.api.deleteLinkSentence( Number.parseInt( ans.get( 'id' )?.value ), Number.parseInt( ans.get( 'prev_sentence' )?.value ) ).subscribe( {
+                    next: (): void => {
+                      // ==>
+                    },
+                    error: err => {
+                      Notification.danger( err.error.message || MESSAGE_ERROR );
+                    }
+                  } );
+                } else if ( ans.get( 'prev_sentence' )?.value && ans.get( 'sentence' )?.value && ans.get( 'prev_sentence' )?.value !== ans.get( 'sentence' )?.value ) {
+
+                  // delete exists link
+                  this.api.deleteLinkSentence( Number.parseInt( ans.get( 'id' )?.value ), Number.parseInt( ans.get( 'prev_sentence' )?.value ) ).subscribe( {
+                    next: (): void => {
+                      // ==>
+                    },
+                    error: err => {
+                      Notification.danger( err.error.message || MESSAGE_ERROR );
+                    }
+                  } );
+
+                  // create new link
+                  this.api.linkSentence( Number.parseInt( ans.get( 'id' )?.value ), Number.parseInt( ans.get( 'sentence' )?.value ) ).subscribe( {
+                    next: (): void => {
+                      // ==>
+                    },
+                    error: err => {
+                      Notification.danger( err.error.message || MESSAGE_ERROR );
+                    }
+                  } );
+                }
               },
               error: (): void => {
                 Notification.danger( `La respuesta "${ ans.get( 'description' )?.value }" no pudo ser registrada.` );
@@ -162,10 +170,21 @@ export class EditComponent implements OnInit {
             this.api.addAnswer( {
               description: ans.get( 'description' )?.value,
               aggravating: this.data.rule.id!,
-              next_aggravating: ans.get( 'next_aggravating' )?.value === 'null' ? null : Number.parseInt( ans.get( 'next_aggravating' )?.value )
+              next_aggravating: ans.get( 'next_aggravating' )?.value ? Number.parseInt( ans.get( 'next_aggravating' )?.value ) : null
             } ).subscribe( {
-              next: (): void => {
-                // ==>
+              next: ( response: Response<AnswerModel> ): void => {
+
+                // create sentence association
+                if ( ans.get( 'sentence' )?.value ) {
+                  this.api.linkSentence( response.result?.id!, Number.parseInt( ans.get( 'sentence' )?.value ) ).subscribe( {
+                    next: (): void => {
+                      // ==>
+                    },
+                    error: err => {
+                      Notification.danger( err.error.message || MESSAGE_ERROR );
+                    }
+                  } );
+                }
               },
               error: (): void => {
                 Notification.danger( `La respuesta "${ ans.get( 'description' )?.value }" no pudo ser registrada.` );

@@ -5,5 +5,5 @@ export interface AnswerModel {
   description: string;
   aggravating: number;
   next_aggravating?: number | null;
-  has_sentence?: SentenceLinkModel[];
+  has_sentence?: SentenceLinkModel;
 }

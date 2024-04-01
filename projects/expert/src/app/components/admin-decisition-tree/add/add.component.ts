@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { DecisionTreeService } from "../../../services/decision-tree.service";
@@ -25,13 +25,12 @@ import { SentencesService } from "../../../services/sentences.service";
   templateUrl: './add.component.html',
   styleUrl: './add.component.scss'
 } )
-export class AddComponent implements OnInit {
+export class AddComponent {
   public loading: boolean = false;
   public rule: FormGroup;
-  public sentences: SentenceModel[] = [];
 
   constructor( private api: DecisionTreeService,
-               @Inject( MAT_DIALOG_DATA ) public data: { law: LawModel, articles: ArticleModel[], rules: AggravatingModel[] },
+               @Inject( MAT_DIALOG_DATA ) public data: { law: LawModel, articles: ArticleModel[], rules: AggravatingModel[], sentences: SentenceModel[] },
                private dialog: MatDialogRef<AddComponent>,
                private sentenceApi: SentencesService,
                private builder: FormBuilder ) {
@@ -43,26 +42,8 @@ export class AddComponent implements OnInit {
     } );
   }
 
-  ngOnInit(): void {
-    this.getSentences();
-  }
-
   get answers(): FormArray {
     return this.rule.controls[ 'answers' ] as FormArray;
-  }
-
-  public getSentences(): void {
-    this.loading = true;
-    this.sentenceApi.all().subscribe( {
-      next: ( response: Response<SentenceModel[]> ): void => {
-        this.loading = false;
-        this.sentences = response.result!;
-      },
-      error: err => {
-        this.loading = false;
-        Notification.danger( err.error.message || MESSAGE_ERROR );
-      }
-    } )
   }
 
   public add(): void {
@@ -87,13 +68,13 @@ export class AddComponent implements OnInit {
           this.api.addAnswer( {
             description: a.get( 'description' )?.value,
             aggravating: response.result?.id!,
-            next_aggravating: a.get( 'next_aggravating' )?.value === 'null' ? null : Number.parseInt( a.get( 'next_aggravating' )?.value )
+            next_aggravating: a.get( 'next_aggravating' )?.value ? Number.parseInt( a.get( 'next_aggravating' )?.value ) : null
           } ).subscribe( {
             next: ( response: Response<AnswerModel> ): void => {
               ansrs += 1;
 
               // add sentence
-              if ( a.get( 'sentence' )?.value !== 'null' ) {
+              if ( a.get( 'sentence' )?.value ) {
                 this.api.linkSentence( response.result?.id!, Number.parseInt( a.get( 'sentence' )?.value ) ).subscribe( {
                   next: (): void => {
                     // ==>
@@ -132,7 +113,7 @@ export class AddComponent implements OnInit {
   public addAnswer(): void {
     this.answers.push( this.builder.group( {
       description: [ { value: '', disabled: false }, [ Validators.required ] ],
-      next_aggravating: [ { value: '', disabled: false }, [ Validators.required ] ],
+      next_aggravating: [ { value: '', disabled: false }, [] ],
       sentence: [ { value: '', disabled: false }, [] ],
     } ) );
   }

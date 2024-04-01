@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { GojsAngularModule } from "gojs-angular";
 import * as go from "gojs";
@@ -18,6 +18,8 @@ import { AddComponent } from "./add/add.component";
 import { Modal } from "../../include/modal";
 import { MatMenuModule } from "@angular/material/menu";
 import { EditComponent } from "./edit/edit.component";
+import { SentenceModel } from "../../model/sentence.model";
+import { SentencesService } from "../../services/sentences.service";
 
 @Component( {
   selector: 'themis-admin-decisition-tree',
@@ -33,7 +35,7 @@ import { EditComponent } from "./edit/edit.component";
   templateUrl: './admin-decisition-tree.component.html',
   styleUrl: './admin-decisition-tree.component.scss',
 } )
-export class AdminDecisitionTreeComponent implements AfterViewInit {
+export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
   public selectedLaw?: string;
   public law?: LawModel;
   public laws: LawModel[] = [];
@@ -41,18 +43,37 @@ export class AdminDecisitionTreeComponent implements AfterViewInit {
   public diagram?: go.Diagram;
   public articles: { [ id: number ]: ArticleModel } = {};
   public rules: AggravatingModel[] = [];
+  public sentences: SentenceModel[] = [];
 
   constructor( private lawApi: LawService,
                private api: DecisionTreeService,
                private articleApi: ArticleService,
+               private sentenceApi: SentencesService,
                private dialog: MatDialog ) {
   }
 
-  ngAfterViewInit(): void {
-
-    this.defineSelect();
+  ngOnInit(): void {
     this.getLaws();
+    this.getSentences();
+  }
+
+  ngAfterViewInit(): void {
+    this.defineSelect();
     this.initGraph();
+  }
+
+  private getSentences(): void {
+    this.loading = true;
+    this.sentenceApi.all().subscribe( {
+      next: ( response: Response<SentenceModel[]> ): void => {
+        this.loading = false;
+        this.sentences = response.result!;
+      },
+      error: err => {
+        this.loading = false;
+        Notification.danger( err.error.message || MESSAGE_ERROR );
+      }
+    } )
   }
 
   private getRules( id: number ): void {
@@ -115,7 +136,8 @@ export class AdminDecisitionTreeComponent implements AfterViewInit {
       data: {
         law: this.law,
         articles: Object.values( this.articles ),
-        rules: this.rules
+        rules: this.rules,
+        sentences: this.sentences
       }
     } ).afterClosed().subscribe( {
       next: ( value: boolean ): void => {
@@ -136,7 +158,8 @@ export class AdminDecisitionTreeComponent implements AfterViewInit {
         law: this.law,
         articles: Object.values( this.articles ),
         rules: this.rules,
-        rule: i
+        rule: i,
+        sentences: this.sentences
       }
     } ).afterClosed().subscribe( {
       next: ( value: boolean ): void => {
