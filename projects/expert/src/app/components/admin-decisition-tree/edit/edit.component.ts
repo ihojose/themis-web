@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
@@ -10,6 +10,9 @@ import { DecisionTreeService } from "../../../services/decision-tree.service";
 import { Notification } from "../../../include/notification";
 import { Response } from "../../../model/response.model";
 import { MESSAGE_ERROR } from "../../../../environments/messages";
+import { SentencesService } from "../../../services/sentences.service";
+import { SentenceModel } from "../../../model/sentence.model";
+import { AnswerModel } from "../../../model/answer.model";
 
 @Component( {
   selector: 'themis-edit',
@@ -23,13 +26,15 @@ import { MESSAGE_ERROR } from "../../../../environments/messages";
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 } )
-export class EditComponent {
+export class EditComponent implements OnInit {
   public loading: boolean = false;
   public rule: FormGroup;
-  public toDelete: number[] = [];
+  public answersToDelete: AnswerModel[] = [];
+  public sentences: SentenceModel[] = [];
 
   constructor( @Inject( DIALOG_DATA ) public data: { law: LawModel, articles: ArticleModel[], rules: AggravatingModel[], rule: AggravatingModel },
                private dialog: MatDialogRef<EditComponent>,
+               private sentenceApi: SentencesService,
                private builder: FormBuilder,
                private api: DecisionTreeService ) {
 
@@ -41,25 +46,58 @@ export class EditComponent {
 
     // add answers
     for ( let a of this.data.rule.answers! ) {
-      this.addAnswer( a.id?.toString(), a.description, a.next_aggravating?.toString() );
+      this.addAnswer( a.id?.toString(), a.description, a.next_aggravating?.toString(), this.getSentence( a ) );
     }
+  }
+
+  ngOnInit(): void {
+    this.getSentences();
   }
 
   get answers(): FormArray {
     return this.rule.get( 'answers' ) as FormArray;
   }
 
+  private getSentence( a: AnswerModel ): string {
+    if ( a.has_sentence ) {
+      return a.has_sentence[ 0 ].sentence.toString();
+    }
+
+    return '';
+  }
+
+  // noinspection DuplicatedCode
+  public getSentences(): void {
+    this.loading = true;
+    this.sentenceApi.all().subscribe( {
+      next: ( response: Response<SentenceModel[]> ): void => {
+        this.loading = false;
+        this.sentences = response.result!;
+      },
+      error: err => {
+        this.loading = false;
+        Notification.danger( err.error.message || MESSAGE_ERROR );
+      }
+    } )
+  }
+
   public addDelete( i: number ): void {
     if ( i > 0 ) {
-      this.toDelete.push( i );
+      for ( let ans of this.data.rule.answers! ) {
+        if ( ans.id === i ) {
+          this.answersToDelete.push( ans );
+          break
+        }
+      }
     }
   }
 
-  public addAnswer( id: string = '', description: string = '', next: string = '' ): void {
+  public addAnswer( id: string = '', description: string = '', next: string = '', sentence: string = '' ): void {
     this.answers.push( this.builder.group( {
       id: [ { value: id, disabled: false }, [] ],
       description: [ { value: description, disabled: false }, [ Validators.required ] ],
       next_aggravating: [ { value: next ? next : 'null', disabled: false }, [ Validators.required ] ],
+      sentence: [ { value: sentence ? sentence : 'null', disabled: false }, [] ],
     } ) );
   }
 
@@ -76,11 +114,25 @@ export class EditComponent {
       article: Number.parseInt( this.rule.get( 'article' )?.value ),
       question: this.rule.get( 'question' )?.value
     } ).subscribe( {
-      next: ( response: Response<AggravatingModel> ): void => {
+      next: (): void => {
 
         // deleted answer list
-        for ( let i of this.toDelete ) {
-          this.api.deleteAnswer( i ).subscribe( {
+        for ( let i of this.answersToDelete ) {
+
+          // delete sentence ref
+          for ( let ref of i.has_sentence! ) {
+            this.api.deleteLinkSentence( ref.answer, ref.sentence ).subscribe( {
+              next: (): void => {
+                // ==>
+              },
+              error: err => {
+                Notification.danger( err.error.message || MESSAGE_ERROR );
+              }
+            } );
+          }
+
+          // delete
+          this.api.deleteAnswer( i.id! ).subscribe( {
             next: (): void => {
               // ==>
             },
@@ -97,7 +149,7 @@ export class EditComponent {
               id: Number.parseInt( ans.get( 'id' )?.value ),
               description: ans.get( 'description' )?.value,
               aggravating: this.data.rule.id!,
-              next_aggravating: ans.get( 'next_aggravating' )?.value === 'null' ? null : Number.parseInt( ans.get( 'next_aggravating' )?.value )
+              next_aggravating: ans.get( 'next_aggravating' )?.value === 'null' ? null : Number.parseInt( ans.get( 'next_aggravating' )?.value ),
             } ).subscribe( {
               next: (): void => {
                 // ==>

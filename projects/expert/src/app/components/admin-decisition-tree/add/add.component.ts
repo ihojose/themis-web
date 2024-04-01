@@ -1,8 +1,7 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { DecisionTreeService } from "../../../services/decision-tree.service";
-import { DIALOG_DATA } from "@angular/cdk/dialog";
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { LawModel } from "../../../model/law.model";
 import { ArticleModel } from "../../../model/article.model";
@@ -11,6 +10,8 @@ import { Notification } from "../../../include/notification";
 import { Response } from "../../../model/response.model";
 import { MESSAGE_ERROR } from "../../../../environments/messages";
 import { AnswerModel } from "../../../model/answer.model";
+import { SentenceModel } from "../../../model/sentence.model";
+import { SentencesService } from "../../../services/sentences.service";
 
 @Component( {
   selector: 'themis-add',
@@ -24,13 +25,15 @@ import { AnswerModel } from "../../../model/answer.model";
   templateUrl: './add.component.html',
   styleUrl: './add.component.scss'
 } )
-export class AddComponent {
+export class AddComponent implements OnInit {
   public loading: boolean = false;
   public rule: FormGroup;
+  public sentences: SentenceModel[] = [];
 
   constructor( private api: DecisionTreeService,
-               @Inject( DIALOG_DATA ) public data: { law: LawModel, articles: ArticleModel[], rules: AggravatingModel[] },
+               @Inject( MAT_DIALOG_DATA ) public data: { law: LawModel, articles: ArticleModel[], rules: AggravatingModel[] },
                private dialog: MatDialogRef<AddComponent>,
+               private sentenceApi: SentencesService,
                private builder: FormBuilder ) {
 
     this.rule = this.builder.group( {
@@ -40,8 +43,26 @@ export class AddComponent {
     } );
   }
 
+  ngOnInit(): void {
+    this.getSentences();
+  }
+
   get answers(): FormArray {
     return this.rule.controls[ 'answers' ] as FormArray;
+  }
+
+  public getSentences(): void {
+    this.loading = true;
+    this.sentenceApi.all().subscribe( {
+      next: ( response: Response<SentenceModel[]> ): void => {
+        this.loading = false;
+        this.sentences = response.result!;
+      },
+      error: err => {
+        this.loading = false;
+        Notification.danger( err.error.message || MESSAGE_ERROR );
+      }
+    } )
   }
 
   public add(): void {
@@ -70,6 +91,18 @@ export class AddComponent {
           } ).subscribe( {
             next: ( response: Response<AnswerModel> ): void => {
               ansrs += 1;
+
+              // add sentence
+              if ( a.get( 'sentence' )?.value !== 'null' ) {
+                this.api.linkSentence( response.result?.id!, Number.parseInt( a.get( 'sentence' )?.value ) ).subscribe( {
+                  next: (): void => {
+                    // ==>
+                  },
+                  error: err => {
+                    Notification.danger( err.error.message || 'No se pudo asociar sentencia.' );
+                  }
+                } );
+              }
             },
             error: err => {
               this.loading = false;
@@ -100,6 +133,7 @@ export class AddComponent {
     this.answers.push( this.builder.group( {
       description: [ { value: '', disabled: false }, [ Validators.required ] ],
       next_aggravating: [ { value: '', disabled: false }, [ Validators.required ] ],
+      sentence: [ { value: '', disabled: false }, [] ],
     } ) );
   }
 

@@ -1,1 +1,41 @@
-<p>add works!</p>
+<h2 mat-dialog-title>Agregar nueva posible sentencia</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading animate__animated animate__fadeIn">
+      <fa-icon [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+    </div>
+  }
+
+  <form class="form" [formGroup]="sentence">
+    <div class="mtr-1">
+      <div class="group pds-5px">
+        <label for="description">Descripción</label>
+        <textarea class="control" formControlName="description" id="description"></textarea>
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+    <div class="grid-2 mtr-1">
+      <div class="group pds-5px">
+        <label for="has_bail">¿Es excarcelable?</label>
+        <select id="has_bail" formControlName="has_bail" class="input-control">
+          <option value="1">Sí</option>
+          <option value="0">No</option>
+        </select>
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+      <div class="group pds-5px">
+        <label for="has_aggrement">¿Puede tener acuerdo?</label>
+        <select id="has_aggrement" formControlName="has_aggrement" class="input-control">
+          <option value="1">Sí</option>
+          <option value="0">No</option>
+        </select>
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="button mrr-1" [mat-dialog-close]="false">Cancelar</button>
+  <button class="button primary" (click)="save()">Registrar</button>
+</mat-dialog-actions>

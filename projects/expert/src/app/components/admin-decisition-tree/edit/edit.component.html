@@ -34,6 +34,7 @@
       <tr>
         <th>Respuesta</th>
         <th>Pregunta destino</th>
+        <th>Sentencia</th>
         <th></th>
       </tr>
       </thead>
@@ -50,6 +51,14 @@
                   @if (data.rule.id! !== ans.id!) {
                     <option [value]="ans.id">{{ ans.question }}</option>
                   }
+                }
+              </select>
+            </td>
+            <td>
+              <select class="control" formControlName="sentence">
+                <option [value]="'null'">No tiene sentencia</option>
+                @for (ans of sentences; track $index) {
+                  <option [value]="ans.id">{{ ans.description }}</option>
                 }
               </select>
             </td>

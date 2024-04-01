@@ -5,6 +5,7 @@ import { Response } from "../model/response.model";
 import { AggravatingModel } from "../model/aggravating.model";
 import { environment } from "../../environments/environment.development";
 import { AnswerModel } from "../model/answer.model";
+import { SentenceLinkModel } from "../model/sentence.model";
 
 @Injectable( {
   providedIn: 'root'
@@ -75,5 +76,23 @@ export class DecisionTreeService {
    */
   public deleteAnswer( id: number ): Observable<any> {
     return this.http.delete<any>( environment.api.delete_asnwer.replace( '{id}', id.toString() ) );
+  }
+
+  /**
+   * Add Sentence association
+   * @param answer Answer ID
+   * @param sentence Sentence ID
+   */
+  public linkSentence( answer: number, sentence: number ): Observable<Response<SentenceLinkModel>> {
+    return this.http.post<Response<SentenceLinkModel>>( environment.api.ref_sentence, { answer, sentence } );
+  }
+
+  /**
+   * Delete Sentence association
+   * @param answer Answer ID
+   * @param sentence Sentence ID
+   */
+  public deleteLinkSentence( answer: number, sentence: number ): Observable<any> {
+    return this.http.delete<any>( environment.api.delete_ref_sentence.replace( '{1}', answer.toString() ).replace( '{2}', sentence.toString() ) );
   }
 }

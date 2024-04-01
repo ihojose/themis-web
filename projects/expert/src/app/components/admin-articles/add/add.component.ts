@@ -27,7 +27,7 @@ import { createMask, InputMaskModule, InputmaskOptions } from "@ngneat/input-mas
 } )
 export class AddComponent {
   public loading: boolean = false;
-  public form: FormGroup;
+  public article: FormGroup;
   public laws: LawModel[] = [];
   public numberMask: InputmaskOptions<any> = createMask( { alias: 'numeric' } );
 
@@ -36,7 +36,7 @@ export class AddComponent {
                private dialog: MatDialogRef<AddComponent>,
                @Inject( MAT_DIALOG_DATA ) private data: LawModel[] ) {
     this.laws = this.data;
-    this.form = this.builder.group( {
+    this.article = this.builder.group( {
       law: [ { value: undefined, disabled: false }, [ Validators.required ] ],
       number: [ { value: '', disabled: false }, [ Validators.required ] ],
       ordinal: [ { value: '', disabled: false }, [ Validators.required ] ],
@@ -47,24 +47,24 @@ export class AddComponent {
   }
 
   public add(): void {
-    if ( this.form.invalid ) {
+    if ( this.article.invalid ) {
       Notification.danger( 'Todos los campos son requeridos.' );
       return;
     }
 
-    if ( Number.parseInt( this.form.get( 'min' )?.value ) > Number.parseInt( this.form.get( 'max' )?.value ) ) {
+    if ( Number.parseInt( this.article.get( 'min' )?.value ) > Number.parseInt( this.article.get( 'max' )?.value ) ) {
       Notification.danger( 'La sentencia máxima debe ser mayor a la sentencia mínima.' );
       return;
     }
 
     this.loading = true;
     this.api.add( {
-      number: Number.parseInt( this.form.get( 'number' )?.value ),
-      ordinal: Number.parseInt( this.form.get( 'ordinal' )?.value ),
-      description: this.form.get( 'description' )?.value,
-      min_months: Number.parseInt( this.form.get( 'min' )?.value ),
-      max_months: Number.parseInt( this.form.get( 'max' )?.value ),
-      law: Number.parseInt( this.form.get( 'law' )?.value )
+      number: Number.parseInt( this.article.get( 'number' )?.value ),
+      ordinal: Number.parseInt( this.article.get( 'ordinal' )?.value ),
+      description: this.article.get( 'description' )?.value,
+      min_months: Number.parseInt( this.article.get( 'min' )?.value ),
+      max_months: Number.parseInt( this.article.get( 'max' )?.value ),
+      law: Number.parseInt( this.article.get( 'law' )?.value )
     } ).subscribe( {
       next: ( response: Response<ArticleModel> ): void => {
         this.loading = false;

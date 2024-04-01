@@ -11,4 +11,51 @@
     </div>
   </div>
 
+  <div class="data-content">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>¿Excarcelable?</th>
+        <th>¿Tiene acuerdo?</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (i of sentences; track $index) {
+          <tr>
+            <td class="right">{{ i.id }}</td>
+            <td>{{ i.description }}</td>
+            <td class="center">{{ i.has_bail ? 'Sí' : 'No' }}</td>
+            <td>{{ i.has_agreement ? 'Sí' : 'No' }}</td>
+            <td class="right">
+              <button class="ellipsis-menu" [matMenuTriggerFor]="menu">
+                <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <ul>
+                  <li (click)="openEdit(i)">
+                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                    Editar
+                  </li>
+                  <li class="delete" (click)="delete(i)">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    Eliminar
+                  </li>
+                </ul>
+              </mat-menu>
+            </td>
+          </tr>
+        }
+
+        @if (sentences.length === 0) {
+          <tr>
+            <td colspan="6" class="center">No hay artículos agregados...</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
 </div>
