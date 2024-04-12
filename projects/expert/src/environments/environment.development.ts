@@ -11,6 +11,9 @@ export const environment: any = {
     // session
     get_sessions: `${ host }/session/{user}`,
     get_history: `${ host }/history/session/{session}`,
+    add_history: `${ host }/history`,
+    add_session: `${ host }/session`,
+    delete_session: `${ host }/session/{id}`,
 
     // roles and permissions
     get_roles: `${ host }/role`,
@@ -31,12 +34,14 @@ export const environment: any = {
 
     // article
     get_articles: `${ host }/article/{id}`,
+    get_article: `${ host }/article/{id}/details`,
     add_article: `${ host }/article`,
     edit_article: `${ host }/article/{id}`,
     delete_article: `${ host }/article/{id}`,
 
     // desicion tree
     get_aggravating: `${ host }/aggravating/{id}`,
+    get_first_aggravating: `${ host }/aggravating/first/{law}`,
     get_aggravating_list: `${ host }/aggravating`,
     get_aggravating_by_article: `${ host }/aggravating/article/{id}`,
     add_aggravating: `${ host }/aggravating`,

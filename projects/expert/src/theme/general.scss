@@ -49,3 +49,9 @@ body {
     margin-right: #{$margin}px;
   }
 }
+
+// stickys
+.sticky {
+  position: sticky;
+  top: 0;
+}

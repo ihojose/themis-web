@@ -43,7 +43,7 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
   public diagram?: go.Diagram;
   public articles: { [ id: number ]: ArticleModel } = {};
   public rules: AggravatingModel[] = [];
-  public sentences: SentenceModel[] = [];
+  public sentences: { [ id: number ]: SentenceModel } = {};
 
   constructor( private lawApi: LawService,
                private api: DecisionTreeService,
@@ -67,7 +67,9 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
     this.sentenceApi.all().subscribe( {
       next: ( response: Response<SentenceModel[]> ): void => {
         this.loading = false;
-        this.sentences = response.result!;
+        for ( let i of response.result! ) {
+          this.sentences[ i.id! ] = i;
+        }
       },
       error: err => {
         this.loading = false;
@@ -97,11 +99,29 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
       } );
 
       for ( let a of r.answers! ) {
+
+        // link to next aggravating
         if ( a.next_aggravating !== null ) {
           // @ts-ignore
           this.diagram?.model.addLinkData( {
             from: r.id,
             to: a.next_aggravating,
+            text: a.description
+          } );
+        }
+
+        // link to sentence
+        if ( a.has_sentence?.sentence! ) {
+          this.diagram?.model.addNodeData( {
+            key: `s${ a.has_sentence?.sentence }`,
+            title: `Sentencia #${ a.has_sentence?.sentence }`,
+            description: this.sentences[ a.has_sentence?.sentence ].description.replace( /(?![^\n]{1,32}$)([^\n]{1,32})\s/g, '$1\n' )
+          } );
+
+          // @ts-ignore
+          this.diagram?.model.addLinkData( {
+            from: r.id,
+            to: `s${ a.has_sentence?.sentence }`,
             text: a.description
           } );
         }
@@ -137,7 +157,7 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
         law: this.law,
         articles: Object.values( this.articles ),
         rules: this.rules,
-        sentences: this.sentences
+        sentences: Object.values( this.sentences )
       }
     } ).afterClosed().subscribe( {
       next: ( value: boolean ): void => {
@@ -159,7 +179,7 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
         articles: Object.values( this.articles ),
         rules: this.rules,
         rule: i,
-        sentences: this.sentences
+        sentences: Object.values( this.sentences )
       }
     } ).afterClosed().subscribe( {
       next: ( value: boolean ): void => {
@@ -183,12 +203,6 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
         Notification.danger( err.error.message || MESSAGE_ERROR );
       }
     } )
-  }
-
-  public graphUpdate( e: any ): void {
-    if ( e.isTransactionFinished ) {
-      console.log( e.model );
-    }
   }
 
   private getArticles(): void {
@@ -308,9 +322,9 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
       "draggingTool.dragsTree": false,
       "commandHandler.deletesTree": false,
       'layout': $( go.TreeLayout, { layerSpacing: 100, setsPortSpot: false, setsChildPortSpot: false } ),
-      "undoManager.isEnabled": true,
+      "undoManager.isEnabled": false,
       "ModelChanged": ( e: any ): void => {
-        this.graphUpdate( e );
+        // this.graphUpdate( e );
       }
     } );
 
@@ -362,17 +376,6 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
         )
       );
 
-    this.diagram.model = new go.GraphLinksModel( [
-      // { key: 1, title: "Decision 1", description: "Consider a, b, and c.\nDo you want to do X?", article: 1 },
-      // { key: 2, title: "Decision 2", description: "Do you want to do Y?", article: 1 },
-      // { key: 3, title: "Outcome 1", description: "The end", article: 1 },
-      // { key: 4, title: "Outcome 1", description: "one solution", article: 1 },
-      // { key: 5, title: "Outcome 2", description: "another solution", article: 1 },
-    ], [
-      // { from: 1, to: 2, text: "Yes" },
-      // { from: 1, to: 3, text: "No" },
-      // { from: 2, to: 4, text: "Yes" },
-      // { from: 2, to: 5, text: "No" },
-    ] );
+    this.diagram.model = new go.GraphLinksModel( [], [] );
   }
 }

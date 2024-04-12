@@ -17,6 +17,10 @@ export class SentencesService {
     return this.http.get<Response<SentenceModel[]>>( environment.api.get_sentences );
   }
 
+  public get( id: number ): Observable<Response<SentenceModel>> {
+    return this.http.get<Response<SentenceModel>>( environment.api.get_sentence.replace( '{id}', id.toString() ) );
+  }
+
   public delete( id: number ): Observable<any> {
     return this.http.delete<any>( environment.api.delete_sentence.replace( '{id}', id.toString() ) );
   }

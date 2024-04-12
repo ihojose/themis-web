@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Agregar nuevo artículo</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading animate__animated animate__fadeIn">
+      <fa-icon [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+    </div>
+  }
+
+  <form class="form" [formGroup]="form">
+    <div class="mtr-1">
+      <div class="group pds-5px">
+        <label for="law">Ley</label>
+        <select id="law" formControlName="law" class="input-control">
+          @for (law of Object.values(laws); track $index) {
+            <option [value]="law.id">Ley {{ law.number }} de {{ law.date | date: 'yyyy' }} - {{ law.title }}</option>
+          }
+        </select>
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="button mrr-1" mat-dialog-close>Cancelar</button>
+  <button class="button primary" (click)="new()">Nueva sesión</button>
+</mat-dialog-actions>

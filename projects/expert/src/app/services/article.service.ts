@@ -13,6 +13,10 @@ export class ArticleService {
   constructor( private http: HttpClient ) {
   }
 
+  public get( id: number ): Observable<Response<ArticleModel>> {
+    return this.http.get<Response<ArticleModel>>( environment.api.get_article.replace( '{id}', id.toString() ) );
+  }
+
   public getByLaw( law: number ): Observable<Response<ArticleModel[]>> {
     return this.http.get<Response<ArticleModel[]>>( environment.api.get_articles.replace( '{id}', law.toString() ) );
   }

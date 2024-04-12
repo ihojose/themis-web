@@ -23,10 +23,6 @@ export class AdminComponent {
 
     // sidebar
     this.sidebar = [ {
-      title: 'Admin',
-      link: [ '/expert/admin' ],
-      icon: [ 'fas', 'cog' ]
-    }, {
       title: 'Cuentas',
       icon: [ 'fas', 'address-book' ],
       link: [ '/expert/admin/accounts' ]

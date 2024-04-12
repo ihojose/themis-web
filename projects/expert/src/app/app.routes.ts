@@ -32,6 +32,10 @@ export const routes: Routes = [ {
     component: AdminComponent,
     title: 'Administración',
     children: [ {
+      path: '',
+      redirectTo: 'accounts',
+      pathMatch: 'full'
+    }, {
       path: 'roles',
       component: AdminRolesComponent,
       title: 'Roles'

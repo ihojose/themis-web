@@ -64,6 +64,18 @@
       background-color: rgba($secondary-color, .3);
     }
   }
+
+  &.tertiary {
+    background-color: $tertiary-color;
+
+    &:hover {
+      background-color: rgba($tertiary-color, .8);
+    }
+
+    &:disabled {
+      background-color: rgba($tertiary-color, .3);
+    }
+  }
 }
 
 .c-button-icon {

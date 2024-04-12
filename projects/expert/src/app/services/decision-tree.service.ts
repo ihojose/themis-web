@@ -6,6 +6,7 @@ import { AggravatingModel } from "../model/aggravating.model";
 import { environment } from "../../environments/environment.development";
 import { AnswerModel } from "../model/answer.model";
 import { SentenceLinkModel } from "../model/sentence.model";
+import { VerdictModel } from "../model/verdict.model";
 
 @Injectable( {
   providedIn: 'root'
@@ -16,11 +17,35 @@ export class DecisionTreeService {
   }
 
   /**
+   * Get first rule
+   * @param law Law ID
+   */
+  public getFirst( law: number ): Observable<Response<AggravatingModel>> {
+    return this.http.get<Response<AggravatingModel>>( environment.api.get_first_aggravating.replace( '{law}', law.toString() ) );
+  }
+
+  /**
+   * Add session verdict
+   * @param data  verdict entity
+   */
+  public addVerdict( data: VerdictModel ): Observable<Response<VerdictModel>> {
+    return this.http.post<Response<VerdictModel>>( environment.api.add_verdict, data );
+  }
+
+  /**
    * Get all aggravating by article
-   * @param id artciel ID
+   * @param id article ID
    */
   public getByArticle( id: number ): Observable<Response<AggravatingModel[]>> {
     return this.http.get<Response<AggravatingModel[]>>( environment.api.get_aggravating_by_article.replace( '{id}', id.toString() ) );
+  }
+
+  /**
+   * Get only one rule
+   * @param id Rule ID
+   */
+  public getRule( id: number ): Observable<Response<AggravatingModel>> {
+    return this.http.get<Response<AggravatingModel>>( environment.api.get_aggravating.replace( '{id}', id.toString() ) );
   }
 
   /**

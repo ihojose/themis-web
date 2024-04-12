@@ -17,7 +17,23 @@ export class SessionService {
    * Get All Sessions by user identification
    * @param user user ID
    */
-  public getSessions( user: number ): Observable<Response<SessionModel[]>> {
+  public all( user: number ): Observable<Response<SessionModel[]>> {
     return this.http.get<Response<SessionModel[]>>( environment.api.get_sessions.replace( '{user}', user.toString() ) );
+  }
+
+  /**
+   * Add new session item
+   * @param data Session Entity
+   */
+  public add( data: SessionModel ): Observable<Response<SessionModel>> {
+    return this.http.post<Response<SessionModel>>( environment.api.add_session, data );
+  }
+
+  /**
+   * Delete session item
+   * @param id session ID
+   */
+  public delete( id: number ): Observable<any> {
+    return this.http.delete<any>( environment.api.delete_session.replace( '{id}', id.toString() ) );
   }
 }

@@ -2,43 +2,46 @@
 
   <!-- sidebar -->
   <div class="sidebar animate__animated animate__fadeInLeft">
-    <div class="title">
-      <div class="desc">
-        <h2>Archivo de consultas</h2>
-        <span>{{ totalSessions | i18nPlural: pluralSessions }}</span>
+    <div class="sticky side-static">
+      <div class="title">
+        <div class="desc">
+          <h2>Archivo de consultas</h2>
+          <span>{{ totalSessions | i18nPlural: pluralSessions }}</span>
+        </div>
+        <div class="add-content">
+          <button class="c-button-icon" (click)="openNew()">
+            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+          </button>
+        </div>
       </div>
-      <div class="add-content">
-        <button class="c-button-icon">
-          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-        </button>
-      </div>
-    </div>
 
-    <!-- session list -->
-    <div id="sessions" class="sessions">
-      <ul>
-        @for (session of sessions; track session.id) {
-          <li [class.active]="activeSession === session.id" (click)="selectSession(session.id)">
-            <div class="icon-cont">
-              <div class="icon-i">
-                <fa-icon [icon]="['fas', 'diagram-predecessor']"></fa-icon>
+      <!-- session list -->
+      <div id="sessions" class="sessions">
+        <ul>
+          @for (session of sessions.slice().reverse(); track session.id!) {
+            <li [class.active]="activeSession?.id === session.id!" (click)="selectSession(session)">
+              <div class="icon-cont">
+                <div class="icon-i">
+                  <fa-icon [icon]="['fas', 'diagram-predecessor']"></fa-icon>
+                </div>
               </div>
-            </div>
-            <div class="text">
-              {{ session.date | date: 'dd/MM/YYYY HH:mm' }}
-            </div>
-            <div class="delete-cont">
-              <div class="icon-i" (click)="deleteSession()">
-                <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+              <div class="text">
+                Sesión: {{ session.date | date: 'dd/MM/YYYY HH:mm' }}
               </div>
-            </div>
-          </li>
-        } @empty {
-          <li>No has hecho consultas</li>
-        }
-      </ul>
+              <div class="delete-cont">
+                <div class="icon-i" (click)="deleteSession(session)">
+                  <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+                </div>
+              </div>
+            </li>
+          } @empty {
+            <li>No has hecho consultas</li>
+          }
+        </ul>
+      </div>
+      <!-- end session list -->
+
     </div>
-    <!-- end session list -->
 
   </div>
   <!-- end sidebar -->
@@ -47,53 +50,117 @@
   <div class="chat animate__animated animate__fadeIn">
 
     <div class="chat-timeline">
-      @for (history of historyList; track history.id) {
-        <div class="item animate__animated animate__fadeIn">
-          <div class="item-header">
-            {{ APP_NAME }}
-          </div>
-          <div class="item-content">
-            {{ history.aggravating }}
-
-            <div class="options">
-
-              <button class="option active" disabled>
-                {{ history.answer_text }}
-              </button>
-
-            </div>
-          </div>
-        </div>
-      } @empty {
-        <div class="item animate__animated animate__fadeIn">
-          <div class="item-header">
-            {{ APP_NAME }}
-          </div>
-          <div class="item-content">
-            <div class="typing">Esta sesión no tiene historial de actividad...</div>
+      @if (law && !loading.law) {
+        <div class="chat-top">
+          <div class="item-content animate__animated animate__fadeIn">
+            <h3><strong>LEY {{ law.number }} DE {{ law.date | date: 'yyyy' }}</strong></h3>
+            {{ law.title }}
           </div>
         </div>
       }
+
+      @for (history of historyList; track history.id) {
+        <div [id]="'conv-' + history.id!" class="item from flex-row">
+          <div class="item-content">
+            {{ history.aggravating }}
+          </div>
+        </div>
+
+        <div class="item to flex-row">
+          <div class="bubble animate__animated animate__fadeInRight">
+            <strong>{{ history.answer_text }}</strong>
+          </div>
+        </div>
+
+      } @empty {
+        @if (!currentQuestion && !currentVerdict) {
+          <div class="welcome-start">Inicia o selecciona una consulta con el experto.</div>
+        }
+      }
+
+      @if (currentQuestion && !loading.question) {
+        <div class="item from flex-row">
+          <div class="item-content animate__animated animate__fadeInLeft">
+            {{ currentQuestion.question }}
+          </div>
+        </div>
+      }
+
+      @if (currentSentence) {
+        <div class="item from sentence">
+          <div class="item-content animate__animated animate__fadeInLeft">
+            {{ currentSentence.description }}
+          </div>
+        </div>
+      }
+
+      @if (!currentQuestion && currentVerdict && !loading.typing) {
+        <div class="item from verdict">
+          <div class="item-content animate__animated animate__fadeInLeft">
+            @if (currentVerdict.has_jail > 0) {
+              Según las validaciones hechas anteriormente, se recomienda sentenciar al acusado a <span class="in-bail">{{ currentVerdict.months / 12 }} años</span> de prisión intramural
+              {{ currentSentence?.has_agreement! > 0 ? 'con' : 'sin' }} posibilidad de acuerdo con la fiscalia.
+            } @else {
+              Según las validaciones hechas anteriormente, no hay motivos suficientes para sentenciar al acusado.
+            }
+          </div>
+        </div>
+      }
+
+      @if (!loading.main && historyList.length > 0 && !currentQuestion && !currentSentence && !currentVerdict) {
+        <div class="item from question">
+          <div class="item-content animate__animated animate__fadeIn">
+            No tengo más interacciones configuradas para tomar una decisión y así llegar a un veredicto.
+          </div>
+        </div>
+      }
+
+      <div #doingQuestion></div>
     </div>
+
+    @if (currentQuestion && !loading.main) {
+      <div class="answer-control animate__animated animate__fadeInUp">
+        <div class="flex-row center">
+          <div class="flex-center mrr-1">
+            <fa-icon [icon]="['far', 'paper-plane']"></fa-icon>
+          </div>
+          <div>
+            @for (btn of currentQuestion.answers!; track $index) {
+              <button class="button primary small mrp-10" (click)="sendAnswer(btn)">
+                {{ btn.description }}
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
 
   </div>
   <!-- end expert -->
 
-  <div class="history animate__animated animate__fadeInRight">
-    <div class="title">
-      <h3>Historial</h3>
+  <!-- history -->
+  @if (historyList.length > 0) {
+    <div class="history animate__animated animate__fadeInRight">
+      <div class="sticky">
+        <div class="title">
+          <h3>Historial</h3>
+        </div>
+        <div class="history-items">
+          <ul>
+            @for (h of historyList; track h.id) {
+              <li (click)="toChatItem(h.id!)" class="animate__animated animate__fadeInRight">
+                <div class="time-icon">
+                  <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+                </div>
+                <div class="item">
+                  {{ h.date! | date: 'dd/MM/yyyy HH:mm:ss' }} - {{ h.answer_text }}
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="history-items">
-      <ul>
-        <li>
-          <div class="time-icon">
-            <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
-          </div>
-          <div class="item">
-            10/10/2022 14:35 - Sí
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
+  }
+  <!-- end history -->
 </div>

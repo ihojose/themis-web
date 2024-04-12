@@ -17,6 +17,11 @@
       };
     };
 
+    .side-static {
+      overflow: auto;
+      height: calc(100vh);
+    }
+
     .title {
       display: flex;
       flex-direction: row;
@@ -124,79 +129,135 @@
 
     .chat-timeline {
       width: 750px;
-      margin: 1rem auto;
-      overflow-y: auto;
+      margin: 0 auto;
+      // overflow-y: auto;
+      padding-top: 1rem;
+      padding-bottom: 100px;
+      position: relative;
+
+      &::-webkit-scrollbar {
+        width: 0;
+      }
+
+      // chat on top
+      .chat-top {
+        margin-bottom: 1.5rem;
+      }
 
       // item
       .item {
         overflow: hidden;
-        border-radius: 10px;
+        border-radius: 15px;
         margin-bottom: 1rem;
 
-        > .item-header {
-          background-color: $dark-light-color-2;
-          padding: 1.3rem;
-          font-weight: 600;
-          letter-spacing: 2px;
+        &.to {
+          justify-content: end;
+          padding-left: 2rem;
+
+          .bubble {
+            background-color: $secondary-color;
+            padding: 1rem;
+            border-radius: 15px;
+          }
         }
 
-        > .item-content {
-          background-color: $card-color;
-          padding: 1.3rem;
+        &.from {
+          padding-right: 2rem;
 
-          .typing {
-            white-space: nowrap;
-            overflow: hidden;
-            animation: typing 3.5s steps(50, end);
+          > .item-header {
+            background-color: $dark-light-color-2;
+            padding: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 2px;
           }
 
-          .options {
-            margin-top: 1.5rem;
+          > .item-content {
+            background-color: $card-color;
+            padding: 1.3rem;
+            border-radius: 15px;
 
-            > .option {
-              background-color: transparent;
-              border: 2px solid $primary-color;
-              color: $primary-color;
-              cursor: pointer;
-              margin-right: .8rem;
-              padding: .4rem .8rem;
-              border-radius: 8px;
-              transition: all 300ms;
-              font-weight: 600;
-              font-size: 14px;
+            .typing {
+              white-space: nowrap;
+              overflow: hidden;
+              animation: typing 3.5s steps(50, end);
+            }
 
-              &.active,
-              &:hover {
-                background-color: $primary-color;
-                color: $card-color;
-              }
+            .options {
+              margin-top: 1.5rem;
 
-              &.active {
-                &:disabled {
+              > .option {
+                background-color: transparent;
+                border: 2px solid $primary-color;
+                color: $primary-color;
+                cursor: pointer;
+                margin-right: .8rem;
+                padding: .4rem .8rem;
+                border-radius: 8px;
+                transition: all 300ms;
+                font-weight: 600;
+                font-size: 14px;
+
+                &.active,
+                &:hover {
                   background-color: $primary-color;
                   color: $card-color;
                 }
-              }
 
-              &:disabled {
-                cursor: not-allowed;
-                background-color: transparent;
-                border: 2px solid rgba($primary-color, .6);
-                color: rgba($primary-color, .6);
+                &.active {
+                  &:disabled {
+                    background-color: $primary-color;
+                    color: $card-color;
+                  }
+                }
+
+                &:disabled {
+                  cursor: not-allowed;
+                  background-color: transparent;
+                  border: 2px solid rgba($primary-color, .6);
+                  color: rgba($primary-color, .6);
+                }
               }
+            }
+          }
+        }
+
+        &.verdict {
+          > .item-content {
+            background-color: rgba($success-dark-color, .8);
+
+            .in-bail {
+              font-weight: bolder;
+              text-decoration: underline;
             }
           }
         }
       }
     }
+
+    // answer control
+    .answer-control {
+      position: fixed;
+      width: 750px;
+      margin: 0 auto;
+      background-color: $dark-light-color-2;
+      bottom: 1rem;
+      left: calc(100% / 2 - 750px / 2);
+      padding: 1rem;
+      border-radius: 8px;
+    }
   }
 
   // history list =====>
   > .history {
-    padding: 1rem;
+    padding: 0 1rem 1rem 1rem;
 
     .title {
       margin-bottom: 1rem;
+      padding-top: 1rem;
+    }
+
+    .history-items {
+      overflow: hidden;
     }
 
     ul {
@@ -208,12 +269,13 @@
         align-items: center;
         cursor: pointer;
         margin-bottom: .3rem;
-        color: rgba($secondary-text-color, .9);
+        color: rgba($secondary-text-color, .5);
         border-right: 3px solid transparent;
         transition: all 200ms;
 
         &:hover {
           border-color: $secondary-text-color;
+          color: rgba($secondary-text-color, 1);
         }
 
         > .item {
@@ -221,5 +283,12 @@
         }
       }
     }
+  }
+
+  .welcome-start {
+    background-color: rgba(black, .3);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 1rem;
   }
 }

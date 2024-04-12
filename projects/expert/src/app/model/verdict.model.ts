@@ -1,7 +1,7 @@
 export interface VerdictModel {
-  id: number;
+  id?: number;
   months: number;
-  date: string;
+  date?: string;
   has_jail: number;
   session: number;
   sentence: number;

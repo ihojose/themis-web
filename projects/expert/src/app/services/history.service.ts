@@ -17,7 +17,15 @@ export class HistoryService {
    * Get history by session
    * @param session session ID
    */
-  public getSessionHistory( session: number ): Observable<Response<HistoryModel[]>> {
+  public getBySession( session: number ): Observable<Response<HistoryModel[]>> {
     return this.http.get<Response<HistoryModel[]>>( environment.api.get_history.replace( '{session}', session.toString() ) );
+  }
+
+  /**
+   * Add item history
+   * @param data History Entity
+   */
+  public add( data: HistoryModel ): Observable<Response<HistoryModel>> {
+    return this.http.post<Response<HistoryModel>>( environment.api.add_history, data );
   }
 }
