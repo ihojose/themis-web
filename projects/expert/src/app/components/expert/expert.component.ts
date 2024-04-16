@@ -39,6 +39,8 @@ export class ExpertComponent implements OnInit {
 
     // user session
     this.user = Jwt.user( this.storage );
+
+    console.log( this.user );
   }
 
   public link( l: string[] ): void {
