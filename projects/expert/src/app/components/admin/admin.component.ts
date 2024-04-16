@@ -46,10 +46,6 @@ export class AdminComponent {
       title: 'Árbol de desición',
       icon: [ 'fas', 'diagram-successor' ],
       link: [ '/expert/admin/tree' ]
-    }, {
-      title: 'Veredictos registrados',
-      icon: [ 'fas', 'gavel' ],
-      link: [ '/expert/admin/verdict' ]
     } ];
   }
 }

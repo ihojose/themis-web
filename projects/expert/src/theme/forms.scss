@@ -45,6 +45,7 @@
       line-height: 1;
     }
 
+    .c-error-message,
     .error-message {
       display: none;
       font-size: 11px;
@@ -88,6 +89,15 @@
           border-color: $danger-color;
 
           + .error-message {
+            display: block;
+          }
+        }
+
+        &.ng-c-invalid {
+          border-color: $danger-color;
+
+          + .error-message,
+          + .c-error-message {
             display: block;
           }
         }

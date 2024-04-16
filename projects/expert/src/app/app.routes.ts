@@ -9,13 +9,17 @@ import { AdminAccountsComponent } from "./components/admin-accounts/admin-accoun
 import { AdminLawsComponent } from "./components/admin-laws/admin-laws.component";
 import { AdminArticlesComponent } from "./components/admin-articles/admin-articles.component";
 import { AdminDecisitionTreeComponent } from "./components/admin-decisition-tree/admin-decisition-tree.component";
-import { AdminVerdictsComponent } from "./components/admin-verdicts/admin-verdicts.component";
 import { AdminSentenceComponent } from "./components/admin-sentence/admin-sentence.component";
+import { RegistrationComponent } from "./components/registration/registration.component";
 
 export const routes: Routes = [ {
   path: 'auth',
   component: AuthenticationComponent,
   title: 'Acceso de usuario'
+}, {
+  path: 'auth/register',
+  component: RegistrationComponent,
+  title: 'Crear cuenta de usuario'
 }, {
   path: 'expert',
   component: ExpertComponent,
@@ -59,10 +63,6 @@ export const routes: Routes = [ {
       path: 'tree',
       component: AdminDecisitionTreeComponent,
       title: 'Árbol de decisión'
-    }, {
-      path: 'verdict',
-      component: AdminVerdictsComponent,
-      title: 'Veredictos'
     } ]
   } ]
 }, {

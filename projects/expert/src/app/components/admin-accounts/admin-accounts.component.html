@@ -1,1 +1,45 @@
-<p>admin-accounts works!</p>
+<div class="animate__animated animate__fadeIn">
+  <div class="title">
+    <h2>Administración de Usuarios</h2>
+    <div class="desc">Panel de gestión de cuentas de usuarios.</div>
+
+    <div class="control">
+
+    </div>
+  </div>
+
+  <div class="data-content">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>ID#</th>
+        <th>Tipo ID</th>
+        <th>Nombre de usuario</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Email</th>
+        <th>Fecha de registro</th>
+        <th>Rol</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (account of accounts; track account.identification) {
+          <tr>
+            <td>{{ account.identification }}</td>
+            <td>{{ account.id_type | idType }}</td>
+            <td>{{ account.username }}</td>
+            <td>{{ account.name }}</td>
+            <td>{{ account.surname }}</td>
+            <td>{{ account.email }}</td>
+            <td>{{ account.reg_date | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ account.role! | userRole: roles }}</td>
+            <td>{{ account.active! | userStatus }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>

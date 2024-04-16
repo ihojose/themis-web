@@ -7,6 +7,12 @@ export const environment: any = {
   api: {
     // account
     auth: `${ host }/account/auth`,
+    get_accounts: `${ host }/account`,
+    register: `${ host }/account`,
+    get_account: `${ host }/account/{id}`,
+    edit_account: `${ host }/account/{id}`,
+    edit_password: `${ host }/account/password`,
+    check_account: `${ host }/account/check/{username}`,
 
     // session
     get_sessions: `${ host }/session/{user}`,

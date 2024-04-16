@@ -10,7 +10,7 @@ import { MESSAGE_ERROR } from "../../../environments/messages";
 import { LocalStorageService } from "../../services/local-storage.service";
 import { AUTH_KEY } from "../../../environments/constants";
 import { ContentUtil } from "../../include/content.util";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 @Component( {
   selector: 'themis-authentication',
@@ -18,7 +18,8 @@ import { Router } from "@angular/router";
   imports: [
     FontAwesomeModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.scss'
@@ -53,7 +54,7 @@ export class AuthenticationComponent implements OnInit {
     this.loading = true;
 
     this.api.auth( {
-      email: this.login.get( 'username' )?.value,
+      username: this.login.get( 'username' )?.value,
       password: this.login.get( 'password' )?.value
     } )?.subscribe( {
       next: ( res: HttpResponse<TokenModel> ): void => {

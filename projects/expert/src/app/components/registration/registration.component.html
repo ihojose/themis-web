@@ -1,0 +1,81 @@
+<div class="auth animate__animated animate__fadeIn">
+  <div class="card">
+    <div class="container">
+      <form class="form" [formGroup]="form" (submit)="submit()">
+        <h2 class="title">Crear cuenta</h2>
+        <div class="sub-title">Crear un cuenta de usuario para poder hacer una consulta con el experto.</div>
+        <div class="group">
+          <input id="name" class="control" formControlName="name" placeholder="Nombre">
+          <div class="error-message">El nombre es requerido</div>
+        </div>
+        <div class="group">
+          <input id="surname" class="control" formControlName="surname" placeholder="Apellido">
+          <div class="error-message">El apellido es requerido</div>
+        </div>
+        <div class="group">
+          <select id="id_type" formControlName="id_type" class="input-control">
+            <option value="C">Cédula de ciudadanía</option>
+            <option value="T">Tarjeta de identidad</option>
+            <option value="E">Cédula de extranjería</option>
+            <option value="J">NIT Persona Jurídica</option>
+            <option value="N">NIT Persona Natural</option>
+          </select>
+        </div>
+        <div class="group">
+          <input id="identification" [class.ng-c-invalid]="errorAvailability['identification']" (focusout)="check('identification')" [inputMask]="idMask" class="control" formControlName="identification" placeholder="Número de identificación">
+          <div class="error-message">@if (errorAvailability[ 'identification' ]) {
+            Este número de identificación ya está registrado
+          } @else {
+            El número de identificación es requerido
+          }</div>
+        </div>
+        <div class="group">
+          <input id="email" [class.ng-c-invalid]="errorAvailability['email']" (focusout)="check('email')" [inputMask]="emailMask" class="control" formControlName="email" placeholder="Correo electrónico">
+          <div class="error-message">@if (errorAvailability[ 'email' ]) {
+            Esta dirección de correo electrónico ya está registrada.
+          } @else {
+            Ingresar una dirección de correo eletrónico válida.
+          }</div>
+        </div>
+        <div class="group">
+          <input id="username" [class.ng-c-invalid]="errorAvailability['username']" (focusout)="check('username')" class="control" formControlName="username" placeholder="Nickname">
+          <div class="error-message">@if (errorAvailability[ 'username' ]) {
+            Este nickname ya está registrado
+          } @else {
+            Debes ingresar un nombre de usuario
+          }</div>
+        </div>
+        <div class="group">
+          <input type="password" id="password" class="control" formControlName="password" placeholder="Contraseña">
+          <div class="error-message">Ingresa una contraseña</div>
+        </div>
+        <div class="group">
+          <input type="password" [class.ng-invalid]="form.get('password')?.value !== form.get('re_password')?.value" id="re_password" class="control" formControlName="re_password" placeholder="Contraseña nuevamente">
+          <div class="error-message">Las contraseñas no coinciden</div>
+        </div>
+        <div class="submit">
+          <button type="submit" class="button large primary" [disabled]="loading">
+            @if (loading) {
+              <fa-icon class="icon" [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+            } @else {
+              Crear mi cuenta
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="switch">
+      <div class="s-circle"></div>
+      <div class="switch-container">
+        <h2 class="title">Hola compañero!</h2>
+        <p class="description">¿Ya tienes tu cuenta?. Tranquilo, puedes ingresar a tu cuenta o recuperar tu contraseña.</p>
+        <div class="reg">
+          <button class="button" routerLink="../">Ingresar a mi cuenta</button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
