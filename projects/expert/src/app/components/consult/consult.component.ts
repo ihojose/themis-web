@@ -336,6 +336,7 @@ export class ConsultComponent implements OnInit {
               this.currentQuestion = undefined;
               this.currentVerdict = undefined;
               this.law = undefined;
+              this.historyList = [];
             }
 
             this.getSessions();

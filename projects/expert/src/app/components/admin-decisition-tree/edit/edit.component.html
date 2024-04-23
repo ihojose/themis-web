@@ -41,7 +41,7 @@
       <tbody formArrayName="answers">
         @for (a of answers.controls; track $index) {
           <tr [formGroupName]="$index">
-            <td>
+            <td style="width: 33%">
               <input class="control" formControlName="description">
             </td>
             <td>
@@ -49,7 +49,7 @@
                 <option value="">No tiene destino</option>
                 @for (ans of data.rules; track $index) {
                   @if (data.rule.id! !== ans.id!) {
-                    <option [value]="ans.id">{{ ans.question }}</option>
+                    <option [value]="ans.id">{{ ans.id }} - {{ ans.question }}</option>
                   }
                 }
               </select>
@@ -58,7 +58,7 @@
               <select class="control" formControlName="sentence">
                 <option value="">No tiene sentencia</option>
                 @for (ans of data.sentences; track $index) {
-                  <option [value]="ans.id">{{ ans.description }}</option>
+                  <option [value]="ans.id">{{ ans.id }} - {{ ans.description }}</option>
                 }
               </select>
             </td>
