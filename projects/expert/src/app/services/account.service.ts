@@ -19,4 +19,12 @@ export class AccountService {
   public getAccounts(): Observable<Response<AccountModel[]>> {
     return this.http.get<Response<AccountModel[]>>( environment.api.get_accounts );
   }
+
+  /**
+   * Modify user data (without password)
+   * @param data User account data
+   */
+  public updateUser( data: AccountModel ): Observable<Response<AccountModel>> {
+    return this.http.put<Response<AccountModel>>( environment.api.edit_account.replace( '{id}', data.identification.toString() ), data );
+  }
 }

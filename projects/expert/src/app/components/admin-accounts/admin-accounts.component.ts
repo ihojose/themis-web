@@ -11,6 +11,10 @@ import { UserStatusPipe } from "../../pipes/user-status.pipe";
 import { RolesService } from "../../services/roles.service";
 import { RoleModel } from "../../model/role.model";
 import { UserRolePipe } from "../../pipes/user-role.pipe";
+import { MatMenu, MatMenuTrigger } from "@angular/material/menu";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { EditComponent } from "./edit/edit.component";
+import { Modal } from "../../include/modal";
 
 @Component( {
   selector: 'themis-admin-accounts',
@@ -20,7 +24,10 @@ import { UserRolePipe } from "../../pipes/user-role.pipe";
     DatePipe,
     IdTypePipe,
     UserStatusPipe,
-    UserRolePipe
+    UserRolePipe,
+    MatMenu,
+    MatMenuTrigger,
+    MatDialogModule
   ],
   templateUrl: './admin-accounts.component.html',
   styleUrl: './admin-accounts.component.scss'
@@ -31,13 +38,62 @@ export class AdminAccountsComponent implements OnInit {
   public loading: boolean = false;
 
   constructor( private api: AccountService,
-               private roleApi: RolesService ) {
+               private roleApi: RolesService,
+               private dialog: MatDialog ) {
   }
 
   ngOnInit(): void {
     this.getRoles();
   }
 
+  /**
+   * Alert to ask if superuser are sure to change another user password
+   * @param data account data
+   */
+  public userStatus( data: AccountModel ): void {
+    Modal.question( {
+      title: `${ data.active ? 'Deshabilitar' : 'Habilitar' } usuario`,
+      text: `¿Estás seguro(a) de ${ data.active ? 'deshabilitar' : 'habilitar' } la cuenta de usuario de ${ data.name } ${ data.surname }?`,
+      confirmText: data.active ? 'Deshabilitar' : 'Habilitar',
+      onConfirm: (): void => {
+        Modal.loading().then();
+        data.active = Math.abs( data.active! - 1 );
+        this.api.updateUser( data ).subscribe( {
+          next: (): void => {
+            Notification.success( `${ data.name } ${ data.active ? 'habilitado' : 'deshabilitado' } exitosamente.` );
+            this.getAccounts();
+          },
+          error: ( err ): void => {
+            Notification.danger( err.error.message || MESSAGE_ERROR );
+          }
+        } );
+      }
+    } ).then();
+  }
+
+  /**
+   * Dialog to modify user data
+   * @param data account data
+   */
+  public openEdit( data: AccountModel ): void {
+    this.dialog.open( EditComponent, {
+      width: '800px',
+      disableClose: true,
+      data: {
+        user: data,
+        roles: Object.values( this.roles )
+      }
+    } ).afterClosed().subscribe( ( r: boolean ): void => {
+      if ( r ) {
+        this.getAccounts();
+      }
+    } );
+  }
+
+  /**
+   * Get all accounts registered
+   * @private
+   */
   private getAccounts(): void {
     this.loading = true;
     this.api.getAccounts().subscribe( {
@@ -52,6 +108,10 @@ export class AdminAccountsComponent implements OnInit {
     } );
   }
 
+  /**
+   * Get all the roles
+   * @private
+   */
   private getRoles(): void {
     this.roleApi.getRoles().subscribe( {
       next: ( response: Response<RoleModel[]> ): void => {

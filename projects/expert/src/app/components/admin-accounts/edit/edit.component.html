@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Panel de modificación de datos de la cuenta de usuario de {{ data.user.name }} {{ data.user.surname }}</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading animate__animated animate__fadeIn">
+      <fa-icon [icon]="['fas', 'circle-notch']" [animation]="'spin'"></fa-icon>
+    </div>
+  }
+
+  <form class="form" [formGroup]="user">
+    <div class="grid-2 mtr-1">
+      <div class="group pds-5px">
+        <label for="doctype">Tipo de identificación</label>
+        <input id="doctype" formControlName="doctype" class="control text-uppercase" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+      <div class="group pds-5px">
+        <label for="docnumber">Número de identificación</label>
+        <input id="docnumber" formControlName="docnumber" class="control" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+    <div class="grid-2 mtr-1">
+      <div class="group pds-5px">
+        <label for="name">Nombre</label>
+        <input id="name" formControlName="name" class="control text-uppercase" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+      <div class="group pds-5px">
+        <label for="surname">Apellido</label>
+        <input id="surname" formControlName="surname" class="control" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+    <div class="grid-2 mtr-1">
+      <div class="group pds-5px">
+        <label for="username">Nombre de usuario</label>
+        <input id="username" formControlName="username" class="control text-uppercase" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+      <div class="group pds-5px">
+        <label for="email">Correo electrónico</label>
+        <input id="email" formControlName="email" class="control" autocomplete="off">
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+    <div class="mtr-1">
+      <div class="group pds-5px">
+        <label for="role">Rol</label>
+        <select id="role" formControlName="role" class="input-control">
+          <option selected [value]="undefined">Seleccionar rol [...]</option>
+          @for (role of data.roles; track $index) {
+            <option [value]="role.id">{{ role.name }} | {{ role.description }}</option>
+          }
+        </select>
+        <div class="error-message">Este campo es requerido</div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="button mrr-1" [mat-dialog-close]="false">Cancelar</button>
+  <button class="button primary" (click)="save()">Guardar</button>
+</mat-dialog-actions>

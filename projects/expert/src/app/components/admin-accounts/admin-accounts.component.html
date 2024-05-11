@@ -36,6 +36,23 @@
             <td>{{ account.reg_date | date: 'dd/MM/yyyy' }}</td>
             <td>{{ account.role! | userRole: roles }}</td>
             <td>{{ account.active! | userStatus }}</td>
+            <td class="right">
+              <button class="ellipsis-menu" [matMenuTriggerFor]="menu">
+                <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <ul>
+                  <li (click)="openEdit(account)">
+                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                    Editar datos
+                  </li>
+                  <li (click)="userStatus(account)">
+                    <fa-icon [icon]="['fas', 'unlock-keyhole']"></fa-icon>
+                    {{ account.active! ? 'Deshabilitar' : 'Habilitar' }}
+                  </li>
+                </ul>
+              </mat-menu>
+            </td>
           </tr>
         }
       </tbody>
