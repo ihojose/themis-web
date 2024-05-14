@@ -1,4 +1,4 @@
-export const host: string = 'http://144.202.97.140:3000';
+export const host: string = 'https://api.themis.umb.ihojose.com:3000';
 
 export const environment: any = {
   notification: {
