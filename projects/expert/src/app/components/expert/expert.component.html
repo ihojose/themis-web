@@ -32,14 +32,14 @@
             </div>
             <div class="desc">Panel de consulta</div>
           </li>
-          <li>
+          <!-- <li>
             <div class="icon">
               <div class="cover">
                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
               </div>
             </div>
             <div class="desc">Configuración</div>
-          </li>
+          </li> -->
           @if (user!.role.name === 'SUPER') {
             <li (click)="link(['/expert/admin'])">
               <div class="icon">

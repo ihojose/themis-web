@@ -25,6 +25,7 @@ import { VerdictModel } from "../../model/verdict.model";
 import { Modal } from "../../include/modal";
 import { LawModel } from "../../model/law.model";
 import { LawService } from "../../services/law.service";
+import { LoadingComponent } from "../../widgets/loading/loading.component";
 
 @Component( {
   selector: 'themis-consult',
@@ -32,7 +33,8 @@ import { LawService } from "../../services/law.service";
   imports: [
     CommonModule,
     FontAwesomeModule,
-    MatDialogModule
+    MatDialogModule,
+    LoadingComponent
   ],
   templateUrl: './consult.component.html',
   styleUrl: './consult.component.scss'
@@ -65,7 +67,8 @@ export class ConsultComponent implements OnInit {
     question: false,
     verdict: false,
     law: false,
-    typing: false
+    typing: false,
+    next: false
   };
   @ViewChild( 'doingQuestion' ) private doingAsk?: ElementRef;
 
@@ -120,6 +123,7 @@ export class ConsultComponent implements OnInit {
       next: ( response: Response<HistoryModel> ): void => {
         console.log( response.result );
         this.historyList.push( response.result! );
+        this.toBottom();
 
         // get next rule if exists
         if ( answer.next_aggravating ) {
@@ -220,6 +224,7 @@ export class ConsultComponent implements OnInit {
    */
   public getHistory( session: number ): void {
     this.loading[ 'history' ] = true;
+    this.loading[ 'next' ] = true;
 
     this.historyApi.getBySession( session ).subscribe( {
       next: ( response: Response<HistoryModel[]> ): void => {
@@ -239,14 +244,17 @@ export class ConsultComponent implements OnInit {
         if ( h.next! ) {
           this.dtApi.getRule( h.next! ).subscribe( {
             next: ( response: Response<AggravatingModel> ): void => {
+              this.loading[ 'next' ] = false;
               this.currentQuestion = response.result!;
               this.getArticle();
             },
             error: err => {
+              this.loading[ 'next' ] = false;
               Notification.danger( err.error.message || MESSAGE_ERROR );
             }
           } );
         } else if ( !h.next && h.sentence ) { // check of it has sentence
+          this.loading[ 'next' ] = false;
           this.currentSentence = h.sentence;
         }
 

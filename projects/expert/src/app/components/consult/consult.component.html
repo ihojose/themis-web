@@ -38,6 +38,10 @@
             <li>No has hecho consultas</li>
           }
         </ul>
+
+        @if (loading.sessions) {
+          <themis-loading></themis-loading>
+        }
       </div>
       <!-- end session list -->
 
@@ -73,9 +77,13 @@
         </div>
 
       } @empty {
-        @if (!currentQuestion && !currentVerdict) {
+        @if (!currentQuestion && !currentVerdict && !loading.history && !loading.next) {
           <div class="welcome-start">Inicia o selecciona una consulta con el experto.</div>
         }
+      }
+
+      @if (loading.history) {
+        <themis-loading></themis-loading>
       }
 
       @if (currentQuestion && !loading.question) {

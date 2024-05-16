@@ -113,7 +113,7 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
         // link to sentence
         if ( a.has_sentence?.sentence! ) {
           this.diagram?.model.addNodeData( {
-            key: `s${ a.has_sentence?.sentence }`,
+            key: `s${a.id}-${ a.has_sentence?.sentence }`,
             title: `Sentencia #${ a.has_sentence?.sentence }`,
             description: this.sentences[ a.has_sentence?.sentence ].description.replace( /(?![^\n]{1,32}$)([^\n]{1,32})\s/g, '$1\n' )
           } );
@@ -121,7 +121,7 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
           // @ts-ignore
           this.diagram?.model.addLinkData( {
             from: r.id,
-            to: `s${ a.has_sentence?.sentence }`,
+            to: `s${a.id}-${ a.has_sentence?.sentence }`,
             text: a.description
           } );
         }
@@ -252,12 +252,12 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
       // Populate the select box:
       customSelectBox.innerHTML = "";
 
-      let list = textBlock.choices;
+      let list: string[] | null = textBlock.choices;
       // Perhaps give some default choices if textBlock.choices is null
       if ( list === null ) list = [ "Default A", "Default B", "Default C" ];
       let l = list.length;
       for ( let i = 0; i < l; i++ ) {
-        let op = document.createElement( "option" );
+        let op: HTMLOptionElement = document.createElement( "option" );
         op.text = list[ i ];
         op.value = list[ i ];
         if ( list[ i ] === textBlock.text ) op.selected = true;
@@ -268,7 +268,7 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
 
       customSelectBox.addEventListener( "keydown", ( e: KeyboardEvent ): undefined | boolean => {
         if ( e.isComposing ) return;
-        let key = e.key;
+        let key: string = e.key;
         if ( key === "Enter" ) {
           // @ts-ignore
           tool.acceptText( go.TextEditingTool.Enter );
@@ -286,8 +286,8 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
         return false;
       }, false );
 
-      let loc = textBlock.getDocumentPoint( go.Spot.TopLeft );
-      let pos = diagram.transformDocToView( loc );
+      let loc: go.Point = textBlock.getDocumentPoint( go.Spot.TopLeft );
+      let pos: go.Point = diagram.transformDocToView( loc );
       customSelectBox.style.left = pos.x + "px";
       customSelectBox.style.top = pos.y + "px";
       customSelectBox.style.position = 'absolute';
@@ -297,11 +297,11 @@ export class AdminDecisitionTreeComponent implements OnInit, AfterViewInit {
       customSelectBox.focus();
     }
 
-    customEditor.hide = function ( diagram, tool ) {
+    customEditor.hide = ( diagram: go.Diagram, tool: go.Tool ): void => {
       diagram.div!.removeChild( customSelectBox );
     }
 
-    customEditor.valueFunction = function () {
+    customEditor.valueFunction = (): string => {
       return customSelectBox.value;
     }
 
