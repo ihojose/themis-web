@@ -72,13 +72,18 @@
 
         <div class="item to flex-row">
           <div class="bubble animate__animated animate__fadeInRight">
-            <strong>{{ history.answer_text }}</strong>
+            {{ history.answer_text }}
           </div>
         </div>
 
       } @empty {
-        @if (!currentQuestion && !currentVerdict && !loading.history && !loading.next) {
-          <div class="welcome-start">Inicia o selecciona una consulta con el experto.</div>
+        @if (!currentQuestion && !currentVerdict && !loading.history && !loading.next && !activeSession) {
+          <div class="welcome-start animate__animated animate__fadeIn">
+            Inicia o selecciona una consulta con el experto.
+            <div class="st-btn">
+              <button class="button primary mt-6" (click)="openNew()">Iniciar consulta</button>
+            </div>
+          </div>
         }
       }
 
@@ -94,22 +99,22 @@
         </div>
       }
 
-      @if (currentSentence) {
-        <div class="item from sentence">
-          <div class="item-content animate__animated animate__fadeInLeft">
-            {{ currentSentence.description }}
+      @if (!currentQuestion && currentSentence && currentVerdict) {
+        @if (currentVerdict.has_jail > 0) {
+          <div class="item from sentence">
+            <div class="item-content animate__animated animate__fadeInLeft">
+              {{ currentSentence.description }}
+            </div>
           </div>
-        </div>
-      }
+        }
 
-      @if (!currentQuestion && currentVerdict && !loading.typing) {
         <div class="item from verdict">
-          <div class="item-content animate__animated animate__fadeInLeft">
+          <div class="item-content animate__animated animate__bounceIn">
             @if (currentVerdict.has_jail > 0) {
-              Según las validaciones hechas anteriormente, se recomienda sentenciar al acusado a <span class="in-bail">{{ currentVerdict.months / 12 }} años</span> de prisión intramural
+              Según las validaciones hechas anteriormente, se recomienda sentenciar al acusado a <span class="in-bail">{{ currentVerdict.months | bailtime }}</span> de prisión intramural
               {{ currentSentence?.has_agreement! > 0 ? 'con' : 'sin' }} posibilidad de acuerdo con la fiscalia.
             } @else {
-              Según las validaciones hechas anteriormente, no hay motivos suficientes para sentenciar al acusado.
+              {{ currentSentence!.description }}
             }
           </div>
         </div>

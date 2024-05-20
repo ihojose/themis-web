@@ -1,11 +1,21 @@
 <!-- header control -->
 <header id="header" class="animate__animated animate__fadeInDown">
   <div class="left">
-    <div class="app-logo" (click)="link(['/expert/consult'])">
+    <div class="app-logo desktop" (click)="link(['/expert'])">
       <div class="icon-cont">
         <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
       </div>
-      THEMIS
+      <span class="nametag">THEMIS</span>
+    </div>
+    <div class="app-logo mobile" (click)="isConsult ? toggleSessions() : link(['/expert'])">
+      <div class="icon-cont">
+        @if (isConsult) {
+          <fa-icon [icon]="['fas', 'bars']"></fa-icon>
+        } @else {
+          <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
+        }
+      </div>
+      <span class="nametag">THEMIS</span>
     </div>
   </div>
   <div class="center">
@@ -15,7 +25,7 @@
     <div class="controls">
 
       <div #toggleUser class="user" (click)="toggleMenu()">
-        <div class="name">{{ user?.name }} {{ user?.surname }}</div>
+        <div class="name">{{ user?.name }} <span class="surname">{{ user?.surname }}</span></div>
 
         <div class="cover">
           <fa-icon [icon]="['fas', 'user']"></fa-icon>
@@ -66,6 +76,6 @@
 </header>
 <!-- end header control -->
 
-<main id="main">
+<main id="main" [class.sidebar-toggled]="consultToggled">
   <router-outlet/>
 </main>

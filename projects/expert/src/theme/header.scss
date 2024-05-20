@@ -50,9 +50,33 @@ header#header {
       font-size: 20px;
       cursor: pointer;
 
+      &.mobile {
+        display: none;
+
+        @media (max-width: $tablet-max) {
+          display: block;
+        }
+      }
+
+      &.desktop {
+        @media (max-width: $tablet-max) {
+          display: none;
+        }
+      }
+
       > .icon-cont {
         display: inline;
         margin-right: 1rem;
+
+        @media (max-width: $phone-max) {
+          margin-right: 0;
+        }
+      }
+
+      @media (max-width: $phone-max) {
+        .nametag {
+          display: none;
+        }
       }
     }
   }
@@ -82,6 +106,12 @@ header#header {
         > .name {
           margin-right: 1rem;
           margin-left: 1rem;
+
+          @media (max-width: $phone-max) {
+            .surname {
+              display: none;
+            }
+          }
         }
 
         > .cover {
@@ -107,6 +137,12 @@ header#header {
         padding: .5rem 0;
         box-shadow: 0 3px 8px rgba(black, .5);
 
+        @media (max-width: $phone-max) {
+          width: 100vw;
+          height: calc(100vh - 80px);
+          right: 0;
+        }
+
         ul {
           list-style-type: none;
 
@@ -118,6 +154,11 @@ header#header {
             font-size: 14px;
             margin-bottom: .3rem;
             cursor: pointer;
+
+            @media (max-width: $phone-max) {
+              padding: 1rem 1rem;
+              font-size: 18pt;
+            }
 
             &:last-child {
               margin-bottom: 0;

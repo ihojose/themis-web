@@ -29,6 +29,10 @@ body {
   text-transform: uppercase;
 }
 
+.text-right {
+  text-align: right;
+}
+
 // margins
 @each $margin in $rem-margins {
   .mrr-#{$margin} {

@@ -1,8 +1,8 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { LocalStorageService } from "../../services/local-storage.service";
 import { Router, RouterOutlet } from "@angular/router";
 import { ContentUtil } from "../../include/content.util";
-import { AUTH_KEY } from "../../../environments/constants";
+import { AUTH_KEY, EXPERT_ACTIVE, EXPERT_TOGGLE } from "../../../environments/constants";
 import { FaIconLibrary, FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { JwtModel } from "../../model/jwt.model";
@@ -21,17 +21,24 @@ import { Jwt } from "../../include/jwt";
 export class ExpertComponent implements OnInit {
   public user?: JwtModel;
   public menu: boolean = false;
+  public isConsult?: boolean = false;
+  public consultToggled: boolean = false;
 
   @ViewChild( 'toggleUser' ) toggleUser?: ElementRef;
   @ViewChild( 'menuElement' ) menuElement?: ElementRef;
 
-  constructor( private storage: LocalStorageService,
+  constructor( public storage: LocalStorageService,
                private router: Router,
                private renderer: Renderer2,
                private icons: FaIconLibrary ) {
     this.icons.addIconPacks( fas );
 
     this.menuRenderer();
+
+    // detect view change
+    this.router.events.subscribe( (): void => {
+      this.isConsult = this.storage.get( EXPERT_ACTIVE );
+    } );
   }
 
   ngOnInit(): void {
@@ -43,6 +50,11 @@ export class ExpertComponent implements OnInit {
     console.log( this.user );
   }
 
+  public toggleSessions(): void {
+    this.storage.save( EXPERT_TOGGLE, !this.consultToggled );
+    this.consultToggled = this.storage.get( EXPERT_TOGGLE )!;
+  }
+
   public link( l: string[] ): void {
     this.router.navigate( l ).then();
   }
@@ -51,7 +63,6 @@ export class ExpertComponent implements OnInit {
     setTimeout( (): void => {
       this.menu = true;
     }, 100 );
-    console.log( 'Cliked' );
   }
 
   private checkSession(): void {
@@ -72,5 +83,10 @@ export class ExpertComponent implements OnInit {
         this.menu = false;
       }
     } );
+  }
+
+  @HostListener( 'click' )
+  public listeningClick(): void {
+    this.consultToggled = this.storage.get( EXPERT_TOGGLE )!;
   }
 }

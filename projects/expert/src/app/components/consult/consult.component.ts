@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SessionModel } from "../../model/session.model";
 import { CommonModule } from "@angular/common";
 import { FaIconLibrary, FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -26,6 +26,8 @@ import { Modal } from "../../include/modal";
 import { LawModel } from "../../model/law.model";
 import { LawService } from "../../services/law.service";
 import { LoadingComponent } from "../../widgets/loading/loading.component";
+import { EXPERT_ACTIVE, EXPERT_TOGGLE } from "../../../environments/constants";
+import { BailTimePipe } from "../../pipes/bail-time.pipe";
 
 @Component( {
   selector: 'themis-consult',
@@ -34,12 +36,13 @@ import { LoadingComponent } from "../../widgets/loading/loading.component";
     CommonModule,
     FontAwesomeModule,
     MatDialogModule,
-    LoadingComponent
+    LoadingComponent,
+    BailTimePipe
   ],
   templateUrl: './consult.component.html',
   styleUrl: './consult.component.scss'
 } )
-export class ConsultComponent implements OnInit {
+export class ConsultComponent implements OnInit, OnDestroy {
   public sessions: SessionModel[] = [];
   public historyList: HistoryModel[] = [];
   public activeSession?: SessionModel;
@@ -81,6 +84,13 @@ export class ConsultComponent implements OnInit {
                private storage: LocalStorageService,
                private dialog: MatDialog ) {
     this.icons.addIconPacks( fas, far );
+
+    this.storage.save( EXPERT_ACTIVE, true );
+    this.storage.save( EXPERT_TOGGLE, false );
+  }
+
+  ngOnDestroy(): void {
+    this.storage.save( EXPERT_ACTIVE, false );
   }
 
   ngOnInit(): void {
@@ -96,6 +106,9 @@ export class ConsultComponent implements OnInit {
    * Open New Session.
    */
   public openNew(): void {
+    // hide sidebar
+    this.storage.save( EXPERT_TOGGLE, false );
+
     this.dialog.open( NewComponent, {
       width: '700px',
       disableClose: true,
@@ -103,9 +116,10 @@ export class ConsultComponent implements OnInit {
     } ).afterClosed().subscribe( {
       next: ( response: { added: boolean, session: SessionModel, law: LawModel } ): void => {
         if ( response.added ) {
+          this.historyList = [];
           this.law = response.law;
           this.getSessions();
-          setTimeout( () => this.selectSession( response.session ), 500 );
+          this.selectSession( response.session );
         }
       }
     } );
@@ -133,6 +147,7 @@ export class ConsultComponent implements OnInit {
               setTimeout( (): void => {
                 this.currentQuestion = response.result!;
                 this.loading.question = false;
+
                 this.toBottom();
               }, 500 );
             },
@@ -146,6 +161,8 @@ export class ConsultComponent implements OnInit {
           this.currentSentence = response.result?.sentence;
           this.toVerdict.hasBail = this.toVerdict.hasBail ? this.toVerdict.hasBail : this.currentSentence?.has_bail! > 0;
           this.toVerdict.hasAggrement = !this.toVerdict.hasAggrement ? this.toVerdict.hasAggrement : this.currentSentence?.has_agreement! > 0;
+
+          console.log( 'bail:', this.toVerdict.hasBail, 'aggr:', this.toVerdict.hasAggrement );
 
           // add verdict following veriables
           setTimeout( (): void => this.doVerdict(), 500 );
@@ -170,17 +187,30 @@ export class ConsultComponent implements OnInit {
       session: this.activeSession?.id!,
       sentence: this.currentSentence?.id!,
       has_jail: this.toVerdict.hasBail ? 1 : 0,
-      months: this.toVerdict.hasAggrement ? this.toVerdict.minInBail : this.toVerdict.maxInBail,
+      months: this.timeInBailOperation(),
     } ).subscribe( {
       next: ( response: Response<VerdictModel> ): void => {
         this.loading.typing = false;
         this.currentVerdict = response.result!;
+        this.toBottom();
+        this.getSessions();
       },
       error: err => {
         this.loading.typing = false;
         Notification.danger( err.error.message || MESSAGE_ERROR );
       }
     } );
+  }
+
+  private timeInBailOperation(): number {
+    let recommededTime: number;
+    let time: number = this.toVerdict.hasAggrement ? this.toVerdict.minInBail : this.toVerdict.maxInBail;
+    let divisor: number = this.historyList.length > 12 ? 1 : 12 - this.historyList.length;
+    let multi: number = this.historyList.length > 8 ? 1 : this.toVerdict.hasAggrement ? 2 : 5;
+
+    recommededTime = ( time / divisor ) * multi;
+
+    return Math.round( recommededTime );
   }
 
   /**
@@ -258,6 +288,14 @@ export class ConsultComponent implements OnInit {
           this.currentSentence = h.sentence;
         }
 
+        // Add sentence
+        if ( this.activeSession?.verdicts?.id ) {
+          setTimeout( (): void => {
+            this.currentVerdict = this.activeSession!.verdicts;
+            this.toBottom();
+          }, 500 );
+        }
+
         // go down
         this.toBottom();
       },
@@ -293,6 +331,8 @@ export class ConsultComponent implements OnInit {
    * @param s Session entity
    */
   public selectSession( s: SessionModel ): void {
+    // hide sidebar
+    this.storage.save( EXPERT_TOGGLE, false );
 
     // check if already selected
     if ( s.id === this.activeSession?.id! ) {
@@ -300,15 +340,11 @@ export class ConsultComponent implements OnInit {
     }
 
     // set session view
+    this.historyList = [];
     this.currentQuestion = undefined;
     this.currentSentence = undefined;
     this.currentVerdict = undefined;
     this.activeSession = s;
-
-    // add verdict
-    if ( this.activeSession?.verdicts?.id ) {
-      this.currentVerdict = this.activeSession.verdicts;
-    }
 
     // get law
     this.loading.law = true;
@@ -316,15 +352,13 @@ export class ConsultComponent implements OnInit {
       next: ( response: Response<LawModel> ): void => {
         this.loading.law = false;
         this.law = response.result!;
+        this.getHistory( this.activeSession!.id! );
       },
       error: err => {
         this.loading.law = false;
         Notification.danger( err.error.message || MESSAGE_ERROR );
       }
     } );
-
-    // load history
-    this.getHistory( this.activeSession.id! );
   }
 
   /**
@@ -343,6 +377,8 @@ export class ConsultComponent implements OnInit {
               this.activeSession = undefined;
               this.currentQuestion = undefined;
               this.currentVerdict = undefined;
+              this.currentSentence = undefined;
+              this.loading.next = false;
               this.law = undefined;
               this.historyList = [];
             }

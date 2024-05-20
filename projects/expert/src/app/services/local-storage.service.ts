@@ -9,11 +9,11 @@ export class LocalStorageService {
   constructor( @Inject( LOCAL_STORAGE ) private storage: StorageService ) {
   }
 
-  public save( key: string, value: string ): void {
+  public save( key: string, value: any ): void {
     this.storage.set( key, value );
   }
 
-  public get( key: string ): string {
+  public get( key: string ): any {
     return this.storage.get( key );
   }
 

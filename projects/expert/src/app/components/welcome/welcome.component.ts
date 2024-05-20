@@ -3,6 +3,7 @@ import { FaIconLibrary, FontAwesomeModule } from "@fortawesome/angular-fontaweso
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { Router } from "@angular/router";
 import moment from "moment/moment";
+import { APP_VERSION } from "../../../environments/constants";
 
 @Component( {
   selector: 'themis-welcome',
@@ -15,6 +16,7 @@ import moment from "moment/moment";
 } )
 export class WelcomeComponent {
   public currentYear: number = moment().year();
+  protected readonly APP_VERSION: string = APP_VERSION;
 
   constructor( private icons: FaIconLibrary, private router: Router ) {
     this.icons.addIconPacks( fas );
