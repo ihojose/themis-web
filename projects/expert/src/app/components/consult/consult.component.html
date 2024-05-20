@@ -112,7 +112,7 @@
           <div class="item-content animate__animated animate__bounceIn">
             @if (currentVerdict.has_jail > 0) {
               Según las validaciones hechas anteriormente, se recomienda sentenciar al acusado a <span class="in-bail">{{ currentVerdict.months | bailtime }}</span> de prisión intramural
-              {{ currentSentence?.has_agreement! > 0 ? 'con' : 'sin' }} posibilidad de acuerdo con la fiscalia.
+              {{ currentSentence!.has_agreement! > 0 ? 'con' : 'sin' }} posibilidad de acuerdo con la fiscalia.
             } @else {
               {{ currentSentence!.description }}
             }
