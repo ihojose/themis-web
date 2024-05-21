@@ -1,8 +1,8 @@
 {
-  "name": "expert",
-  "short_name": "expert",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "Themis",
+  "short_name": "themis",
+  "theme_color": "#192740",
+  "background_color": "#0f1729",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
@@ -44,8 +44,8 @@
       "purpose": "maskable any"
     },
     {
-      "src": "assets/icons/icon-384x384.png",
-      "sizes": "384x384",
+      "src": "assets/icons/icon-256x256.png",
+      "sizes": "256x256",
       "type": "image/png",
       "purpose": "maskable any"
     },
