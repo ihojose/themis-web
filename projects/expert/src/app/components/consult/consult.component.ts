@@ -110,7 +110,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
     this.storage.save( EXPERT_TOGGLE, false );
 
     this.dialog.open( NewComponent, {
-      width: '700px',
+      width: '600px',
       disableClose: true,
       data: { user: this.user! }
     } ).afterClosed().subscribe( {
