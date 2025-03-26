@@ -51,7 +51,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
   public totalSessions: number = 0;
   public currentQuestion?: AggravatingModel;
   public currentSentence?: SentenceModel;
-  public currentVerdict?: VerdictModel;
+  public currentVerdict?: VerdictModel[];
   public toVerdict = {
     minInBail: 0,
     maxInBail: 0,
@@ -183,34 +183,45 @@ export class ConsultComponent implements OnInit, OnDestroy {
    */
   private doVerdict(): void {
     this.loading.typing = true;
-    this.dtApi.addVerdict( {
-      session: this.activeSession?.id!,
-      sentence: this.currentSentence?.id!,
-      has_jail: this.toVerdict.hasBail ? 1 : 0,
-      months: this.timeInBailOperation(),
-    } ).subscribe( {
-      next: ( response: Response<VerdictModel> ): void => {
-        this.loading.typing = false;
-        this.currentVerdict = response.result!;
-        this.toBottom();
-        this.getSessions();
-      },
-      error: err => {
-        this.loading.typing = false;
-        Notification.danger( err.error.message || MESSAGE_ERROR );
-      }
-    } );
+    for ( let i of this.timeInBailOperation() ) {
+      this.dtApi.addVerdict( {
+        session: this.activeSession?.id!,
+        sentence: this.currentSentence?.id!,
+        has_jail: this.toVerdict.hasBail ? 1 : 0,
+        months: i,
+      } ).subscribe( {
+        next: ( response: Response<VerdictModel> ): void => {
+          this.loading.typing = false;
+          this.currentVerdict = [];
+          this.currentVerdict?.push( response.result! );
+          this.toBottom();
+          this.getSessions();
+        },
+        error: err => {
+          this.loading.typing = false;
+          Notification.danger( err.error.message || MESSAGE_ERROR );
+        }
+      } );
+    }
   }
 
-  private timeInBailOperation(): number {
-    let recommededTime: number;
+  private timeInBailOperation(): number[] {
+    let minimumTime: number;
+    let maxTime: number;
+    let recommendedTime: number;
     let time: number = this.toVerdict.hasAggrement ? this.toVerdict.minInBail : this.toVerdict.maxInBail;
     let divisor: number = this.historyList.length > 12 ? 1 : 12 - this.historyList.length;
     let multi: number = this.historyList.length > 8 ? 1 : this.toVerdict.hasAggrement ? 2 : 5;
 
-    recommededTime = ( time / divisor ) * multi;
+    minimumTime = this.toVerdict.minInBail;
+    maxTime = this.toVerdict.maxInBail;
+    recommendedTime = ( time / divisor ) * multi;
 
-    return Math.round( recommededTime );
+    return [
+      minimumTime,
+      maxTime,
+      Math.round( recommendedTime )
+    ];
   }
 
   /**
@@ -291,7 +302,8 @@ export class ConsultComponent implements OnInit, OnDestroy {
         // Add sentence
         if ( this.activeSession?.verdicts?.id ) {
           setTimeout( (): void => {
-            this.currentVerdict = this.activeSession!.verdicts;
+            this.currentVerdict = [];
+            this.currentVerdict.push( this.activeSession!.verdicts! );
             this.toBottom();
           }, 500 );
         }
