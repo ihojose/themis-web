@@ -166,7 +166,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
           console.log( 'bail:', this.toVerdict.hasBail, 'aggr:', this.toVerdict.hasAggrement );
 
           // add verdict following veriables
-          if ( this.toVerdict.hasBail || this.toVerdict.hasAggrement ) {
+          if ( this.toVerdict.hasBail ) {
             setTimeout( (): void => this.doVerdict(), 500 );
           }
         }
