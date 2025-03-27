@@ -73,6 +73,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
     typing: false,
     next: false
   };
+  public verdictTimes: number[] = [];
   @ViewChild( 'doingQuestion' ) private doingAsk?: ElementRef;
 
   constructor( private icons: FaIconLibrary,
@@ -165,7 +166,9 @@ export class ConsultComponent implements OnInit, OnDestroy {
           console.log( 'bail:', this.toVerdict.hasBail, 'aggr:', this.toVerdict.hasAggrement );
 
           // add verdict following veriables
-          setTimeout( (): void => this.doVerdict(), 500 );
+          if ( this.toVerdict.hasBail || this.toVerdict.hasAggrement ) {
+            setTimeout( (): void => this.doVerdict(), 500 );
+          }
         }
 
         this.currentQuestion = undefined;
@@ -183,6 +186,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
    */
   private doVerdict(): void {
     this.loading.typing = true;
+    this.currentVerdict = [];
     for ( let i of this.timeInBailOperation() ) {
       this.dtApi.addVerdict( {
         session: this.activeSession?.id!,
@@ -192,7 +196,6 @@ export class ConsultComponent implements OnInit, OnDestroy {
       } ).subscribe( {
         next: ( response: Response<VerdictModel> ): void => {
           this.loading.typing = false;
-          this.currentVerdict = [];
           this.currentVerdict?.push( response.result! );
           this.toBottom();
           this.getSessions();
@@ -266,6 +269,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
   public getHistory( session: number ): void {
     this.loading[ 'history' ] = true;
     this.loading[ 'next' ] = true;
+    this.currentVerdict = [];
 
     this.historyApi.getBySession( session ).subscribe( {
       next: ( response: Response<HistoryModel[]> ): void => {
@@ -300,12 +304,10 @@ export class ConsultComponent implements OnInit, OnDestroy {
         }
 
         // Add sentence
-        if ( this.activeSession?.verdicts?.id ) {
-          setTimeout( (): void => {
-            this.currentVerdict = [];
-            this.currentVerdict.push( this.activeSession!.verdicts! );
-            this.toBottom();
-          }, 500 );
+        if ( this.activeSession?.verdicts?.length! > 0 ) {
+          this.currentVerdict! = this.activeSession!.verdicts!;
+          this.verdictTimes = this.currentVerdict!.map( ( v: VerdictModel ) => v.months! );
+          this.toBottom();
         }
 
         // go down
@@ -421,5 +423,13 @@ export class ConsultComponent implements OnInit, OnDestroy {
    */
   public toChatItem( id: number ): void {
     document.getElementById( `conv-${ id }` )!.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+  }
+
+  public isMax( i: number ): boolean {
+    return Math.max( ...this.verdictTimes ) === i;
+  }
+
+  public isMin( i: number ): boolean {
+    return Math.min( ...this.verdictTimes ) === i;
   }
 }

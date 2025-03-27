@@ -115,7 +115,13 @@
               <ul>
                 @for (verdict of currentVerdict; track $index) {
                   <li>
-                    <span class="in-bail">{{ verdict.months | bailtime }}</span> de prisión intramural.
+                    @if (isMax(verdict.months)) {
+                      La sentencia máxima permitida por la ley, es de <span class="in-bail">{{ verdict.months | bailtime }}</span> de prisión intramural.
+                    } @else if (isMin(verdict.months)) {
+                      La sentencia mínima exigida por la ley, es de <span class="in-bail">{{ verdict.months | bailtime }}</span> de prisión intramural.
+                    } @else {
+                      La sentencia recomendada por el sistema, es de <span class="in-bail">{{ verdict.months | bailtime }}</span> de prisión intramural.
+                    }
                   </li>
                 }
               </ul>

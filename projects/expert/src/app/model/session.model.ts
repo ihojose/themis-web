@@ -5,5 +5,5 @@ export interface SessionModel {
   date?: string;
   account: number;
   law: number;
-  verdicts?: VerdictModel;
+  verdicts?: VerdictModel[];
 }
