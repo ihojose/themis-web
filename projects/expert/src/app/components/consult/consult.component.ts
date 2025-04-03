@@ -197,6 +197,8 @@ export class ConsultComponent implements OnInit, OnDestroy {
         next: ( response: Response<VerdictModel> ): void => {
           this.loading.typing = false;
           this.currentVerdict?.push( response.result! );
+
+          this.verdictTimes = this.currentVerdict!.map( ( v: VerdictModel ) => v.months! );
           this.toBottom();
           this.getSessions();
         },
@@ -343,13 +345,14 @@ export class ConsultComponent implements OnInit, OnDestroy {
   /**
    * Select session
    * @param s Session entity
+   * @param reload
    */
-  public selectSession( s: SessionModel ): void {
+  public selectSession( s: SessionModel, reload: boolean = false ): void {
     // hide sidebar
     this.storage.save( EXPERT_TOGGLE, false );
 
     // check if already selected
-    if ( s.id === this.activeSession?.id! ) {
+    if ( s.id === this.activeSession?.id! && !reload ) {
       return;
     }
 
