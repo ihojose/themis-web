@@ -197,8 +197,6 @@ export class ConsultComponent implements OnInit, OnDestroy {
         next: ( response: Response<VerdictModel> ): void => {
           this.loading.typing = false;
           this.currentVerdict?.push( response.result! );
-
-          this.verdictTimes = this.currentVerdict!.map( ( v: VerdictModel ) => v.months! );
           this.toBottom();
           this.getSessions();
         },
@@ -207,6 +205,10 @@ export class ConsultComponent implements OnInit, OnDestroy {
           Notification.danger( err.error.message || MESSAGE_ERROR );
         }
       } );
+
+      this.currentVerdict = Array.from( new Set( this.currentVerdict ) );
+      this.verdictTimes = this.currentVerdict.map( ( v: VerdictModel ) => v.months! );
+      this.verdictTimes = Array.from( new Set( this.verdictTimes ) );
     }
   }
 
@@ -309,6 +311,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
         if ( this.activeSession?.verdicts?.length! > 0 ) {
           this.currentVerdict! = this.activeSession!.verdicts!;
           this.verdictTimes = this.currentVerdict!.map( ( v: VerdictModel ) => v.months! );
+          this.verdictTimes = Array.from( new Set( this.verdictTimes ) );
           this.toBottom();
         }
 
