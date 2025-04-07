@@ -206,6 +206,10 @@
         &.from {
           padding-right: 2rem;
 
+          .top-m {
+            margin-top: 1rem;
+          }
+
           > .item-header {
             background-color: $dark-light-color-2;
             padding: 1.3rem;
@@ -368,4 +372,14 @@
       }
     }
   }
+}
+
+.mat-expansion-panel {
+  background: rgba(255 255 255 / 75%) !important;
+  border-radius: 20px !important;
+  color: black !important;
+}
+
+.mat-expansion-panel-header-title {
+  color: black !important;
 }

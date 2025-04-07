@@ -95,6 +95,15 @@
         <div class="item from flex-row">
           <div class="item-content animate__animated animate__fadeInLeft">
             {{ currentQuestion.question }}
+            <div class="top-m"></div>
+            <mat-accordion>
+              <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>Relacionado: Artículo {{ currentQuestion.article }} de la ley {{ law?.number }} de {{ law?.date | date: 'yyyy' }}</mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>{{ currentQuestion.articleText }}</p>
+              </mat-expansion-panel>
+            </mat-accordion>
           </div>
         </div>
       }

@@ -28,6 +28,7 @@ import { LawService } from "../../services/law.service";
 import { LoadingComponent } from "../../widgets/loading/loading.component";
 import { EXPERT_ACTIVE, EXPERT_TOGGLE } from "../../../environments/constants";
 import { BailTimePipe } from "../../pipes/bail-time.pipe";
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle } from "@angular/material/expansion";
 
 @Component( {
   selector: 'themis-consult',
@@ -37,7 +38,11 @@ import { BailTimePipe } from "../../pipes/bail-time.pipe";
     FontAwesomeModule,
     MatDialogModule,
     LoadingComponent,
-    BailTimePipe
+    BailTimePipe,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle
   ],
   templateUrl: './consult.component.html',
   styleUrl: './consult.component.scss'
@@ -48,6 +53,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
   public activeSession?: SessionModel;
   public law?: LawModel;
   public user?: JwtModel;
+  public articles: { [ id: number ]: ArticleModel } = {};
   public totalSessions: number = 0;
   public currentQuestion?: AggravatingModel;
   public currentSentence?: SentenceModel;
@@ -149,6 +155,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
                 this.currentQuestion = response.result!;
                 this.loading.question = false;
 
+                this.getArticle();
                 this.toBottom();
               }, 500 );
             },
@@ -205,11 +212,13 @@ export class ConsultComponent implements OnInit, OnDestroy {
           Notification.danger( err.error.message || MESSAGE_ERROR );
         }
       } );
+    }
 
+    setTimeout( (): void => {
       this.currentVerdict = Array.from( new Set( this.currentVerdict ) );
       this.verdictTimes = this.currentVerdict.map( ( v: VerdictModel ) => v.months! );
       this.verdictTimes = Array.from( new Set( this.verdictTimes ) );
-    }
+    }, 500 );
   }
 
   private timeInBailOperation(): number[] {
@@ -240,6 +249,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
       next: ( response: Response<ArticleModel> ): void => {
         this.toVerdict.minInBail = response.result?.min_months! > this.toVerdict.minInBail ? response.result?.min_months! : this.toVerdict.minInBail;
         this.toVerdict.maxInBail = response.result?.max_months! > this.toVerdict.maxInBail ? response.result?.max_months! : this.toVerdict.maxInBail;
+        this.currentQuestion!.articleText = response.result?.description!;
       },
       error: err => {
         Notification.danger( err.error.message || MESSAGE_ERROR );
