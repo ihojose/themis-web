@@ -284,6 +284,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
     this.loading[ 'history' ] = true;
     this.loading[ 'next' ] = true;
     this.currentVerdict = [];
+    this.verdictTimes = [];
 
     this.historyApi.getBySession( session ).subscribe( {
       next: ( response: Response<HistoryModel[]> ): void => {
