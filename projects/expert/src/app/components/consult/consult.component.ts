@@ -165,7 +165,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
 
                 this.getArticle();
                 this.toBottom();
-              }, 500 );
+              }, 400 );
             },
             error: err => {
               this.loading.question = false;
@@ -182,7 +182,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
 
           // add verdict following veriables
           if ( this.toVerdict.hasBail ) {
-            setTimeout( (): void => this.doVerdict(), 500 );
+            this.doVerdict();
           }
         }
 
@@ -202,6 +202,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
   private doVerdict(): void {
     this.loading.typing = true;
     this.currentVerdict = [];
+    this.verdictTimes = [];
     for ( let i of this.timeInBailOperation() ) {
       this.dtApi.addVerdict( {
         session: this.activeSession?.id!,
@@ -212,6 +213,7 @@ export class ConsultComponent implements OnInit, OnDestroy {
         next: ( response: Response<VerdictModel> ): void => {
           this.loading.typing = false;
           this.currentVerdict?.push( response.result! );
+          this.verdictTimes.push( response.result?.months! );
           this.toBottom();
           this.getSessions();
         },
@@ -222,11 +224,9 @@ export class ConsultComponent implements OnInit, OnDestroy {
       } );
     }
 
-    setTimeout( (): void => {
-      this.currentVerdict = Array.from( new Set( this.currentVerdict ) );
-      this.verdictTimes = this.currentVerdict.map( ( v: VerdictModel ) => v.months! );
-      this.verdictTimes = Array.from( new Set( this.verdictTimes ) );
-    }, 500 );
+    this.currentVerdict = Array.from( new Set( this.currentVerdict ) );
+
+    console.log( "verdict times:", this.verdictTimes, "current:", this.currentVerdict );
   }
 
   private timeInBailOperation(): number[] {

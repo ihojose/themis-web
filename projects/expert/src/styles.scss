@@ -1,4 +1,3 @@
-
 // styles
 @import "animate.css/animate.min.css";
 @import "theme/general";
@@ -20,5 +19,12 @@
 @import "theme/admin";
 @import "theme/data-table";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
+}
