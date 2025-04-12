@@ -115,6 +115,14 @@ export class ConsultComponent implements OnInit, OnDestroy {
   public openNew(): void {
     // hide sidebar
     this.storage.save( EXPERT_TOGGLE, false );
+    this.toVerdict = {
+      minInBail: 0,
+      maxInBail: 0,
+      hasBail: false,
+      hasAggrement: false
+    };
+
+    console.log( this.toVerdict )
 
     this.dialog.open( NewComponent, {
       width: '600px',
